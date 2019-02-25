@@ -1,0 +1,12 @@
+-r requirements.in
+# Testing
+python-dotenv==0.9.1
+pytest==3.6.4
+responses
+flake8==3.5.0
+tox
+# Documentation
+Sphinx==1.7.6
+sphinx_rtd_theme
+sphinxcontrib-napoleon
+
