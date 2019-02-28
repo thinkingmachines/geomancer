@@ -1,5 +1,5 @@
 numpy
 pandas
 pandas-gbq
-google-cloud-bigquery
+google-cloud-bigquery[pandas,pyarrow]
 loguru

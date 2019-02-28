@@ -15,7 +15,7 @@ flake8==3.5.0
 google-api-core==1.8.0
 google-auth-oauthlib==0.2.0
 google-auth==1.6.3
-google-cloud-bigquery==1.9.0
+google-cloud-bigquery[pandas,pyarrow]==1.9.0
 google-cloud-core==0.29.1
 google-resumable-media==0.3.2
 googleapis-common-protos==1.5.8
@@ -35,6 +35,7 @@ pluggy==0.7.1
 pockets==0.7.2
 protobuf==3.6.1
 py==1.8.0
+pyarrow==0.12.1
 pyasn1-modules==0.2.4
 pyasn1==0.4.5
 pycodestyle==2.3.1
