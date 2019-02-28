@@ -25,23 +25,23 @@ from loguru import logger
 class Spell(abc.ABC):
     """Base class for all feature/spell implementations"""
 
-    @property
-    @logger.catch
-    def query(self):
-        """Defines the BigQuery query for the particular feature"""
-        raise NotImplementedError
+    query = None
 
-    @staticmethod
+    @logger.catch
+    @abc.abstractclassmethod
     def cast(
+        cls,
         on,
         df,
+        client,
         source_table,
         feature_name,
         column='geometry',
         within=10 * 1000,
+        bq_load_target_id='geomancer',
         **kwargs
     ):
-        """Applies the feature transform to an input pandas.DataFrame
+        """Apply the feature transform to an input pandas.DataFrame
 
         Parameters
         ----------
@@ -51,6 +51,8 @@ class Spell(abc.ABC):
             Dataframe containing the points to compare upon. By default, we
             will look into the :code:`geometry` column. You can specify your
             own column by passing an argument to the :code:`column` parameter.
+        client : google.cloud.client.Client
+            Cloud Client for making requests.
         source_table : str
             BigQuery table to run queries against.
         feature_name : str
@@ -60,6 +62,10 @@ class Spell(abc.ABC):
         within : float, optional
             Look for values within a particular range. Its value is in meters,
             the default is :code:`10,000` meters.
+        bq_load_target_id : str
+            Specify the BQ dataset where the input pandas.DataFrame will be loaded into.
+            Internally, we load the dataframe into a BigQuery table before running the actual
+            query. Default is :code:`geomancer`.
 
         Returns
         -------
