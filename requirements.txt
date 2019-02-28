@@ -1,6 +1,9 @@
+ansimarkup==1.4.0
+better-exceptions-fork==0.2.1.post6
 cachetools==3.1.0
 certifi==2018.11.29
 chardet==3.0.4
+colorama==0.4.1
 google-api-core==1.7.0
 google-auth-oauthlib==0.2.0
 google-auth==1.6.3
@@ -9,6 +12,7 @@ google-cloud-core==0.29.1
 google-resumable-media==0.3.2
 googleapis-common-protos==1.5.8
 idna==2.8
+loguru==0.2.5
 numpy==1.16.1
 oauthlib==3.0.1
 pandas-gbq==0.9.0
@@ -17,6 +21,7 @@ protobuf==3.6.1
 pyasn1-modules==0.2.4
 pyasn1==0.4.5
 pydata-google-auth==0.1.2
+pygments==2.3.1
 python-dateutil==2.8.0
 pytz==2018.9
 requests-oauthlib==1.2.0
