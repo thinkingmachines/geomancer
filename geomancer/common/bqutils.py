@@ -6,6 +6,7 @@
 import uuid
 import time
 import datetime
+import pytz
 
 # Import modules
 from google.cloud import bigquery
@@ -64,7 +65,7 @@ def upload_df_to_bq(df, client, dataset, expiry=3, max_retries=10):
     # Wait for the table to be uploaded before setting expiry
     if expiry:
         table = client.get_table(table_ref)
-        expiration = datetime.datetime.now() + datetime.timedelta(hours=expiry)
+        expiration = datetime.datetime.now(pytz.utc) + datetime.timedelta(hours=expiry)
         table.expires = expiration
         client.update_table(table, ['expires'])
         logger.debug(
