@@ -2,4 +2,5 @@ numpy
 pandas
 pandas-gbq
 google-cloud-bigquery[pandas,pyarrow]
+pytz
 loguru
