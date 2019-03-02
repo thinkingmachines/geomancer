@@ -112,6 +112,7 @@ class DistanceToNearest(Spell):
 
         # Perform query
         logger.debug('Performing query: {}'.format(q))
-        query_job = client.query(q).to_dataframe()
+        query_job = client.query(q)  # Expose job to get its ID
+        results = query_job.results()
 
-        return query_job
+        return results.to_dataframe()
