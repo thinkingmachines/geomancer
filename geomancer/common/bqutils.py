@@ -26,10 +26,11 @@ def upload_df_to_bq(df, client, dataset, expiry=3, max_retries=10):
     dataset : google.cloud.bigquery.dataset.Dataset
         Dataset to upload the DataFrame into
     expiry : int, None
-        Number of hours for a given table to expire.
+        Number of hours for a given table to expire. Default
+        is :code:`3`.
     max_retries: int
-        Number of retries for the upload job. To ensure
-        that the table exists
+        Number of retries for the upload job to ensure
+        that the table exists. Default is :code:`10`
 
     Returns
     -------
