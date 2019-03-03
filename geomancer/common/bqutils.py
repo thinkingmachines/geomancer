@@ -65,19 +65,34 @@ def upload_df_to_bq(df, client, dataset, expiry=3, max_retries=10):
 
     # Wait for the table to be uploaded before setting expiry
     if expiry:
-        table = client.get_table(table_ref)
-        expiration = datetime.datetime.now(pytz.utc) + datetime.timedelta(hours=expiry)
-        table.expires = expiration
-        client.update_table(table, ['expires'])
-        logger.debug(
-            'Table {} will expire in {} hour/s'.format(table_path, expiry)
-        )
+        set_table_expiry(client, table_ref, expiry)
 
     return table_path
 
 
+def set_table_expiry(client, table_ref, expiry):
+    """Set expiration date of table in hours
+
+    Parameters
+    ----------
+    client : google.cloud.client.Client
+        Cloud Client for making requests
+    table_ref : google.cloud.bigquery.table.TableReference
+        Reference to a BigQuery table
+    expiry : int
+        Expiration in hours
+    """
+    table = client.get_table(table_ref)
+    expiration = datetime.datetime.now(pytz.utc) + datetime.timedelta(
+        hours=expiry
+    )
+    table.expires = expiration
+    client.update_table(table, ['expires'])
+    logger.debug('Table will expire in {} hour/s'.format(expiry))
+
+
 def fetch_bq_dataset(client, dataset_id):
-    """Fetch a BigQuery Dataset if it exists. Else, it creates a new one
+    """Fetch a BigQuery Dataset if it exists, else, create a new one
 
     Parameters
     ----------
