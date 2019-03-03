@@ -43,6 +43,8 @@ class Spell(abc.ABC):
     ):
         """Apply the feature transform to an input pandas.DataFrame
 
+        This is an abstract class method, and must be implemented in each subclass.
+
         Parameters
         ----------
         on : str
@@ -71,5 +73,10 @@ class Spell(abc.ABC):
         -------
         pandas.DataFrame
             Output dataframe with the features per given point
+
+        Raises
+        ------
+        NotImplementedError
+            This is an abstract class method
         """
         raise NotImplementedError
