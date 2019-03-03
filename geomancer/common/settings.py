@@ -2,16 +2,16 @@
 
 """Contains default configurations for interacting with external clients
 
-If you wish to override the default configurations, simply subclass them
+If you wish to override the default configurations, simply instantiate the class
 and set the value you desire. For example, you wish to lengthen the expiry
 date of a BigQuery table from 3 (the default) to 12:
 
-    ..code-block:: python
+    >>> from geomancer import BQConfig
+    >>> myconfig = BQConfig()
+    >>> assert myconfig.EXPIRY == 3 # Default value
+    >>> myconfig.EXPIRY = 12 # Update config
+    >>> assert myconfig.EXPIRY == 12
 
-        from geomancer import BQConfig
-
-        class MyConfig(BQConfig):
-            EXPIRY = 12 # overrides the default 3
 """
 
 
