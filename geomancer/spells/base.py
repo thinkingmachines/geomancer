@@ -21,6 +21,8 @@ import abc
 # Import modules
 from loguru import logger
 
+from ..common.settings import BQConfig
+
 
 class Spell(abc.ABC):
     """Base class for all feature/spell implementations"""
@@ -38,7 +40,7 @@ class Spell(abc.ABC):
         feature_name,
         column='geometry',
         within=10 * 1000,
-        bq_load_target_id='geomancer',
+        bq_options=BQConfig,
         **kwargs
     ):
         """Apply the feature transform to an input pandas.DataFrame
@@ -64,10 +66,8 @@ class Spell(abc.ABC):
         within : float, optional
             Look for values within a particular range. Its value is in meters,
             the default is :code:`10,000` meters.
-        bq_load_target_id : str
-            Specify the BQ dataset where the input pandas.DataFrame will be loaded into.
-            Internally, we load the dataframe into a BigQuery table before running the actual
-            query. Default is :code:`geomancer`.
+        bq_options : geomancer.BQConfig
+            Specify configuration for interacting with BigQuery
 
         Returns
         -------

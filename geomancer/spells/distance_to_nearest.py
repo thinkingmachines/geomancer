@@ -7,6 +7,7 @@ from loguru import logger
 
 from .base import Spell
 from ..common import bqutils as bq
+from ..common.settings import BQConfig
 
 
 class DistanceToNearest(Spell):
@@ -60,7 +61,7 @@ class DistanceToNearest(Spell):
         feature_name,
         column='geometry',
         within=10 * 1000,
-        bq_load_target_id='geomancer',
+        bq_options=BQConfig,
         **kwargs
     ):
         """Apply the feature transform to an input pandas.DataFrame
@@ -84,10 +85,8 @@ class DistanceToNearest(Spell):
         within : float, optional
             Look for values within a particular range. Its value is in meters,
             the default is :code:`10,000` meters.
-        bq_load_target_id : str
-            Specify the BQ dataset where the input pandas.DataFrame will be loaded into.
-            Internally, we load the dataframe into a BigQuery table before running the actual
-            query. Default is :code:`geomancer`.
+        bq_options : geomancer.BQConfig
+            Specify configuration for interacting with BigQuery
 
         Returns
         -------
@@ -96,8 +95,14 @@ class DistanceToNearest(Spell):
         """
 
         # Load dataframe into bq with expiry
-        dataset = bq.fetch_bq_dataset(client, dataset_id=bq_load_target_id)
-        table_path = bq.upload_df_to_bq(df=df, client=client, dataset=dataset)
+        dataset = bq.fetch_bq_dataset(client, dataset_id=bq_options.DATASET_ID)
+        table_path = bq.upload_df_to_bq(
+            df=df,
+            client=client,
+            dataset=dataset,
+            expiry=bq_options.EXPIRY,
+            max_retries=bq_options.MAX_RETRIES,
+        )
 
         # Format query
         q_ = cls.query.format(
