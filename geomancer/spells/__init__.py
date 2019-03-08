@@ -2,4 +2,4 @@
 
 from .distance_to_nearest import DistanceToNearest
 
-__all__ = ['DistanceToNearest']
+__all__ = ["DistanceToNearest"]

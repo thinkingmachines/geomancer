@@ -45,14 +45,14 @@ def upload_df_to_bq(df, client, dataset, expiry=3, max_retries=10):
     job = client.load_table_from_dataframe(df, table_ref)
 
     # Create full table path
-    table_path = '{}.{}.{}'.format(
+    table_path = "{}.{}.{}".format(
         dataset.project, dataset.dataset_id, table_id
     )
 
     # Poll until the job is complete
     while max_retries > 0 and not job.done():
         logger.debug(
-            'Upload job is not yet done, retrying... (Retries left: {})'.format(
+            "Upload job is not yet done, retrying... (Retries left: {})".format(
                 max_retries
             )
         )
@@ -60,7 +60,7 @@ def upload_df_to_bq(df, client, dataset, expiry=3, max_retries=10):
         time.sleep(10)
         job.reload()
 
-    logger.debug('Done uploading dataframe to: {}'.format(table_path))
+    logger.debug("Done uploading dataframe to: {}".format(table_path))
 
     # Wait for the table to be uploaded before setting expiry
     if expiry:
@@ -86,8 +86,8 @@ def set_table_expiry(client, table_ref, expiry):
         hours=expiry
     )
     table.expires = expiration
-    client.update_table(table, ['expires'])
-    logger.debug('Table will expire in {} hour/s'.format(expiry))
+    client.update_table(table, ["expires"])
+    logger.debug("Table will expire in {} hour/s".format(expiry))
 
 
 def fetch_bq_dataset(client, dataset_id):

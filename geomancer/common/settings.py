@@ -32,6 +32,6 @@ class BQConfig:
 
     """
 
-    DATASET_ID = 'geomancer'
+    DATASET_ID = "geomancer"
     EXPIRY = 3
     MAX_RETRIES = 10

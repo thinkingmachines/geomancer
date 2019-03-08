@@ -34,7 +34,7 @@ class Spell(abc.ABC):
     """Base class for all feature/spell implementations"""
 
     @abc.abstractmethod
-    def __init__(self, source_table, feature_name, column='geometry'):
+    def __init__(self, source_table, feature_name, column="geometry"):
         """Spell constructor
 
         Parameters
