@@ -1,9 +1,12 @@
+-e git+git://github.com/thinkingmachines/pybigquery.git@gis#egg=pybigquery
 ansimarkup==1.4.0
 better-exceptions-fork==0.2.1.post6
 cachetools==3.1.0
 certifi==2018.11.29
 chardet==3.0.4
 colorama==0.4.1
+future==0.17.1
+geoalchemy2==0.5.0
 google-api-core==1.7.0
 google-auth-oauthlib==0.2.0
 google-auth==1.6.3
@@ -29,4 +32,5 @@ requests-oauthlib==1.2.0
 requests==2.21.0
 rsa==4.0
 six==1.12.0
+sqlalchemy==1.2.18
 urllib3==1.24.1

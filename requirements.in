@@ -1,6 +1,9 @@
+-e git://github.com/thinkingmachines/pybigquery.git@gis#egg=pybigquery
+geoalchemy2
+google-cloud-bigquery[pandas,pyarrow]
+loguru
 numpy
 pandas
 pandas-gbq
-google-cloud-bigquery[pandas,pyarrow]
 pytz
-loguru
+sqlalchemy

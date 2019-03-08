@@ -42,7 +42,6 @@ def upload_df_to_bq(df, client, dataset, expiry=3, max_retries=10):
     table_ref = dataset.table(table_id)
 
     # Run job
-    df = df.reset_index()
     job = client.load_table_from_dataframe(df, table_ref)
 
     # Create full table path
