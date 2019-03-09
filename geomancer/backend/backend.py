@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from . import cores, settings
+# Import modules
 from sqlalchemy.engine import create_engine
 from sqlalchemy.schema import MetaData, Table
+
+from . import cores, settings
+
+DB_CORE = {"bq": cores.BigQueryCore, "sqlite": cores.SQLiteCore}
 
 
 def get_tables(source_uri, target_df, engine, options, **kwargs):
@@ -26,18 +30,23 @@ def get_tables(source_uri, target_df, engine, options, **kwargs):
     (sqlalchemy.schema.Table, sqlalchemy.schema.Table)
         Source and Target table
     """
+    dbcore = DB_CORE[options.name](**kwargs)
     if options.name == "bq":
-        dbcore = cores.BigQueryCore(**kwargs)
+        target_uri = dbcore.load(
+            df=target_df,
+            dataset_id=options.DATASET_ID,
+            expiry=options.EXPIRY,
+            max_retries=options.MAX_RETRIES,
+        )
+    elif options.name == "sqlite":
+        target_uri = dbcore.load(
+            df=target_df,
+            index_label=options.INDEX_LABEL,
+            index=options.INDEX,
+            if_exists=options.IF_EXISTS,
+        )
     else:
         raise TypeError("Unknown DBCore config {}".format(type(options)))
-
-    # Get the URI of the uploaded DataFrame
-    target_uri = dbcore.load(
-        df=target_df,
-        dataset_id=options.DATASET_ID,
-        expiry=options.EXPIRY,
-        max_retries=options.MAX_RETRIES,
-    )
 
     # Create SQLAlchemy primitives
     metadata = MetaData(bind=engine)
@@ -61,11 +70,7 @@ def get_engine(options, **kwargs):
     -------
     sqlalchemy.engine.base.Engine
     """
-    if options.name == "bq":
-        dbcore = cores.BigQueryCore(**kwargs)
-    else:
-        raise TypeError("Unknown DBCore config {}".format(type(options)))
-
+    dbcore = DB_CORE[options.name](**kwargs)
     engine = create_engine(dbcore.database_uri)
 
     return engine
