@@ -22,12 +22,10 @@ import abc
 import pandas as pd
 from loguru import logger
 from sqlalchemy import literal_column
-from sqlalchemy.engine import create_engine
-from sqlalchemy.schema import MetaData, Table
 from sqlalchemy.sql import select
 
-from ..common import bqutils as bq
-from ..common.settings import BQConfig
+from ..backend import get_tables, get_engine
+from ..backend.settings import BQConfig
 
 
 class Spell(abc.ABC):
@@ -40,7 +38,7 @@ class Spell(abc.ABC):
         Parameters
         ----------
         source_table : str
-            BigQuery table to run queries against.
+            Table URI to run queries against.
         feature_name : str
             Column name for the output feature.
         column : str, optional
@@ -54,7 +52,7 @@ class Spell(abc.ABC):
     def query(self, source, target):
         """Build the query used to extract features
 
-        This is an abstract class method, and must be implemented in each subclass.
+        This is an abstract method, and must be implemented in each subclass.
 
         Parameters
         ----------
@@ -71,15 +69,16 @@ class Spell(abc.ABC):
         Raises
         ------
         NotImplementedError
-            This is an abstract class method
+            This is an abstract method
         """
         raise NotImplementedError
 
     @logger.catch
-    def cast(self, df, client, bq_options=BQConfig, **kwargs):
+    def cast(self, df, options=BQConfig(), **kwargs):
         """Apply the feature transform to an input pandas.DataFrame
 
-        This is an abstract class method, and must be implemented in each subclass.
+        If using BigQuery, a :code:`google.cloud.client.Client`
+        must be passed in the :code:`client` parameter
 
         Parameters
         ----------
@@ -89,30 +88,27 @@ class Spell(abc.ABC):
             own column by passing an argument to the :code:`column` parameter.
         client : google.cloud.client.Client
             Cloud Client for making requests.
-        bq_options : geomancer.BQConfig
-            Specify configuration for interacting with BigQuery
+        options : geomancer.Config
+            Specify configuration for interacting with the database backend.
+            Default is a BigQuery Configuration
 
         Returns
         -------
         pandas.DataFrame
             Output dataframe with the features per given point
         """
-        # Load dataframe into bq with expiry
-        dataset = bq.fetch_bq_dataset(client, dataset_id=bq_options.DATASET_ID)
-        table_path = bq.upload_df_to_bq(
-            df=df,
-            client=client,
-            dataset=dataset,
-            expiry=bq_options.EXPIRY,
-            max_retries=bq_options.MAX_RETRIES,
-        )
 
-        # Retrieve table metadata
-        database_url = "bigquery://{}".format(client.project)
-        engine = create_engine(database_url)
-        metadata = MetaData(bind=engine)
-        source = Table(self.source_table, metadata, autoload=True)
-        target = Table(table_path, metadata, autoload=True)
+        # Get engine
+        engine = get_engine(options, **kwargs)
+
+        # Get source and target tables
+        source, target = get_tables(
+            source_uri=self.source_table,
+            target_df=df,
+            engine=engine,
+            options=options,
+            **kwargs
+        )
 
         # Build query
         query = self.query(source, target)

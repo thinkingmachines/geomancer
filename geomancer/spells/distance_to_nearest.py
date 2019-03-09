@@ -20,6 +20,12 @@ class DistanceToNearest(Spell):
         within : float, optional
             Look for values within a particular range. Its value is in meters,
             the default is :code:`10,000` meters.
+        source_table : str
+            BigQuery table to run queries against.
+        feature_name : str
+            Column name for the output feature.
+        column : str, optional
+            Column to look the geometries from. The default is :code:`geometry`
         """
         super(DistanceToNearest, self).__init__(**kwargs)
         self.on = on

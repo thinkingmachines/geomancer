@@ -14,8 +14,19 @@ date of a BigQuery table from 3 (the default) to 12:
 
 """
 
+# Import standard library
+import abc
 
-class BQConfig:
+
+class Config(abc.ABC):
+    """General configuration"""
+
+    @abc.abstractproperty
+    def name(self):
+        pass
+
+
+class BQConfig(Config):
     """Configuration for interacting with BigQuery
 
     Attributes
@@ -31,6 +42,10 @@ class BQConfig:
         Default is :code:`10`
 
     """
+
+    @property
+    def name(self):
+        return "bq"
 
     DATASET_ID = "geomancer"
     EXPIRY = 3
