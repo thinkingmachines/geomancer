@@ -2,6 +2,7 @@
 # Testing
 bumpversion
 python-dotenv==0.9.1
+pytest-cov
 pytest==3.6.4
 flake8==3.5.0
 tox
