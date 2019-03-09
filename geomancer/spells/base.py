@@ -78,7 +78,7 @@ class Spell(abc.ABC):
         """Apply the feature transform to an input pandas.DataFrame
 
         If using BigQuery, a :code:`google.cloud.client.Client`
-        must be passed in the :code:`client` parameter
+        must be passed in the :code:`client` parameter.
 
         Parameters
         ----------
@@ -86,11 +86,11 @@ class Spell(abc.ABC):
             Dataframe containing the points to compare upon. By default, we
             will look into the :code:`geometry` column. You can specify your
             own column by passing an argument to the :code:`column` parameter.
-        client : google.cloud.client.Client
-            Cloud Client for making requests.
         options : geomancer.Config
             Specify configuration for interacting with the database backend.
             Default is a BigQuery Configuration
+        **kwargs
+            Arguments to be passed on the DBCore constructor
 
         Returns
         -------

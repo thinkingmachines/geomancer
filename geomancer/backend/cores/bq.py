@@ -15,7 +15,18 @@ from .base import DBCore
 
 
 class BigQueryCore(DBCore):
-    """BigQuery DBCore"""
+    """BigQuery DBCore
+
+    Attributes
+    ----------
+    client : google.cloud.client.Client
+        BigQuery client for handling BQ interactions
+    prefix : str
+        Prefix for a BigQuery database
+    database_uri : str
+        Specific URI for a given database. Automatically
+        attaches itself to the current active project
+    """
 
     def __init__(self, client):
         """Initialize the database core
@@ -29,9 +40,10 @@ class BigQueryCore(DBCore):
         self.client = client
         self.prefix = "bigquery://{}"
         self.database_uri = self.prefix.format(self.client.project)
+        logger.debug("Using database_uri: {}".format(self.database_uri))
 
     def load(self, df, dataset_id, expiry=3, max_retries=10):
-        """Upload a pandas.Dataframe as a BigQuery table with a unique 32-char ID
+        """Upload a pandas.DataFrame as a BigQuery table with a unique 32-char ID
 
         Parameters
         ----------
