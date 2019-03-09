@@ -50,3 +50,31 @@ class BQConfig(Config):
     DATASET_ID = "geomancer"
     EXPIRY = 3
     MAX_RETRIES = 10
+
+
+class SQLiteConfig(Config):
+    """Configuration for interacting with a SQLite Database
+
+    Attributes
+    ----------
+    INDEX : bool
+        Write pandas.DataFrame index as column. Uses INDEX_LABEL for column name
+        Default is :code:`False`
+    INDEX_LABEL : str or None
+        Column label for the index columns
+        Default is :code:`None`
+    IF_EXISTS : str
+        How to behave if the table already exists. Default is
+        :code:`replace`
+        - fail: raise a ValueError
+        - replace: drop the table before inserting new values
+        - append: insert new values to the existing table
+    """
+
+    @property
+    def name(self):
+        return "sqlite"
+
+    INDEX = False
+    INDEX_LABEL = None
+    IF_EXISTS = "replace"
