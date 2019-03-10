@@ -37,6 +37,11 @@ class SQLiteCore(DBCore):
         except sqlite3.OperationalError:
             conn.load_extension("libspatialite.so")
 
+        # Here we're mimicking BQ client by implicitly creating a column
+        # __index_level_0__ via the pyarrow dependency
+        df = df.reset_index()
+        df = df.rename(columns={"index": "__index_level_0__"})
+
         # Load dataframe into SQL table
         df.to_sql(table_id, con=conn, index=index, if_exists=if_exists)
         conn.close()
