@@ -19,7 +19,7 @@ class BigQueryCore(DBCore):
 
     Attributes
     ----------
-    client : google.cloud.client.Client
+    host : google.cloud.client.Client
         BigQuery client for handling BQ interactions
     prefix : str
         Prefix for a BigQuery database
@@ -28,18 +28,10 @@ class BigQueryCore(DBCore):
         attaches itself to the current active project
     """
 
-    def __init__(self, client):
-        """Initialize the database core
-
-        Parameters
-        ----------
-        client : google.cloud.client.Client
-            Cloud Client for making requests
-        """
-        super(BigQueryCore, self).__init__()
-        self.client = client
+    def __init__(self, host):
+        super(BigQueryCore, self).__init__(host)
         self.prefix = "bigquery://{}"
-        self.database_uri = self.prefix.format(self.client.project)
+        self.database_uri = self.prefix.format(self.host.project)
         logger.debug("Using database_uri: {}".format(self.database_uri))
 
     def load(self, df, dataset_id, expiry=3, max_retries=10):
@@ -71,7 +63,7 @@ class BigQueryCore(DBCore):
         table_ref = dataset.table(table_id)
 
         # Run job
-        job = self.client.load_table_from_dataframe(df, table_ref)
+        job = self.host.load_table_from_dataframe(df, table_ref)
 
         # Create full table path
         table_path = "{}.{}.{}".format(
@@ -107,12 +99,12 @@ class BigQueryCore(DBCore):
         expiry : int
             Expiration in hours
         """
-        table = self.client.get_table(table_ref)
+        table = self.host.get_table(table_ref)
         expiration = datetime.datetime.now(pytz.utc) + datetime.timedelta(
             hours=expiry
         )
         table.expires = expiration
-        self.client.update_table(table, ["expires"])
+        self.host.update_table(table, ["expires"])
         logger.debug("Table will expire in {} hour/s".format(expiry))
 
     def _fetch_dataset(self, dataset_id):
@@ -128,11 +120,11 @@ class BigQueryCore(DBCore):
         google.cloud.bigquery.dataset.Dataset
             The Dataset class to build tables from
         """
-        dataset_ref = self.client.dataset(dataset_id)
+        dataset_ref = self.host.dataset(dataset_id)
         dataset = bigquery.Dataset(dataset_ref)
         try:
-            dataset = self.client.create_dataset(dataset)
+            dataset = self.host.create_dataset(dataset)
         except Conflict:
-            dataset = self.client.get_dataset(dataset_ref)
+            dataset = self.host.get_dataset(dataset_ref)
 
         return dataset

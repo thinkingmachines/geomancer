@@ -74,7 +74,7 @@ class Spell(abc.ABC):
         raise NotImplementedError
 
     @logger.catch
-    def cast(self, df, options=BQConfig(), **kwargs):
+    def cast(self, df, host, options=BQConfig()):
         """Apply the feature transform to an input pandas.DataFrame
 
         If using BigQuery, a :code:`google.cloud.client.Client`
@@ -86,11 +86,15 @@ class Spell(abc.ABC):
             Dataframe containing the points to compare upon. By default, we
             will look into the :code:`geometry` column. You can specify your
             own column by passing an argument to the :code:`column` parameter.
+        host : google.cloud.client.Client or str
+            Object where requests will be passed onto. If the backend database:
+                * is **BigQuery**, then a :code:`google.cloud.client.Client`
+                must be passed.
+                * is **SQLite**, then a :code:`str` that points to the SQLite
+                database must be passed.
         options : geomancer.Config
             Specify configuration for interacting with the database backend.
             Default is a BigQuery Configuration
-        **kwargs
-            Arguments to be passed on the DBCore constructor
 
         Returns
         -------
@@ -99,7 +103,7 @@ class Spell(abc.ABC):
         """
 
         # Get engine
-        engine = get_engine(options, **kwargs)
+        engine = get_engine(options, host)
 
         # Get source and target tables
         source, target = get_tables(
@@ -107,7 +111,7 @@ class Spell(abc.ABC):
             target_df=df,
             engine=engine,
             options=options,
-            **kwargs
+            host=host
         )
 
         # Build query

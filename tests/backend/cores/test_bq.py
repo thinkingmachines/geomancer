@@ -11,7 +11,7 @@ from geomancer.backend.cores.bq import BigQueryCore
 @pytest.mark.usefixtures("sample_points", "bq_config", "bq_client")
 def test_bqdbcore_load(sample_points, bq_config, bq_client):
     """Test if load() method returns correct target_uri"""
-    bq_core = BigQueryCore(client=bq_client)
+    bq_core = BigQueryCore(host=bq_client)
     target_uri = bq_core.load(
         df=sample_points,
         dataset_id=bq_config.DATASET_ID,

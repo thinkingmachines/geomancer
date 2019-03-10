@@ -9,7 +9,7 @@ from . import cores, settings
 DB_CORE = {"bq": cores.BigQueryCore, "sqlite": cores.SQLiteCore}
 
 
-def get_tables(source_uri, target_df, engine, options, **kwargs):
+def get_tables(source_uri, target_df, engine, options, host):
     """Create tables given a sqlalchemy.engine.base.Engine
 
     Parameters
@@ -22,15 +22,19 @@ def get_tables(source_uri, target_df, engine, options, **kwargs):
         Engine with the databse dialect
     options : geomancer.Config
         Configuration for interacting with the database backend
-    **kwargs
-        Arguments to be passed on the DBCore constructor
+    host : google.cloud.client.Client or str
+        Object where requests will be passed onto. If the backend database:
+            * is **BigQuery**, then a :code:`google.cloud.client.Client`
+            must be passed.
+            * is **SQLite**, then a :code:`str` that points to the SQLite
+            database must be passed.
 
     Returns
     -------
     (sqlalchemy.schema.Table, sqlalchemy.schema.Table)
         Source and Target table
     """
-    dbcore = DB_CORE[options.name](**kwargs)
+    dbcore = DB_CORE[options.name](host=host)
     if options.name == "bq":
         target_uri = dbcore.load(
             df=target_df,
@@ -56,21 +60,25 @@ def get_tables(source_uri, target_df, engine, options, **kwargs):
     return source, target
 
 
-def get_engine(options, **kwargs):
+def get_engine(options, host):
     """Get the engine from the DBCore
 
     Parameters
     ----------
     options : geomancer.Config
         Configuration for interacting with the database backend
-    **kwargs
-        Arguments to be passed on the DBCore constructor
+    host : google.cloud.client.Client or str
+        Object where requests will be passed onto. If the backend database:
+            * is **BigQuery**, then a :code:`google.cloud.client.Client`
+            must be passed.
+            * is **SQLite**, then a :code:`str` that points to the SQLite
+            database must be passed.
 
     Returns
     -------
     sqlalchemy.engine.base.Engine
     """
-    dbcore = DB_CORE[options.name](**kwargs)
+    dbcore = DB_CORE[options.name](host=host)
     engine = create_engine(dbcore.database_uri)
 
     return engine

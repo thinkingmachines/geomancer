@@ -15,7 +15,22 @@ class DBCore(abc.ABC):
     """Base class for all DBCore implementations"""
 
     @abc.abstractmethod
-    def load(self, df):
+    def __init__(self, host):
+        """Initialize the database core
+
+        Parameters
+        ----------
+        host : google.cloud.client.Client or str
+            Object where requests will be passed onto. If the backend database:
+                * is **BigQuery**, then a :code:`google.cloud.client.Client`
+                must be passed.
+                * is **SQLite**, then a :code:`str` that points to the SQLite
+                database must be passed.
+        """
+        self.host = host
+
+    @abc.abstractmethod
+    def load(self, df, host):
         """Load a pandas.Dataframe into the Database
 
         This is an abstract method, and must be implemented in each subclass.

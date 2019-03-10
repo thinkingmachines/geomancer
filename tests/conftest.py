@@ -16,26 +16,15 @@ def sample_points():
     return df
 
 
-@pytest.fixture
-def table_path():
-    """Return path to SQLite table"""
-    return "tests/data/source.sqlite"
-
-
-@pytest.fixture
-def sqlite_config():
-    """Return a SQLiteConfig instance"""
-    return SQLiteConfig()
-
-
-@pytest.fixture
-def bq_config():
-    """Return a BQConfig instance"""
-    return BQConfig()
-
-
-@pytest.fixture
-def bq_client():
-    """Return a BigQuery client"""
-    # TODO: Use a testing service account for this
-    return bigquery.Client()
+@pytest.fixture(
+    params=[
+        ("tests/data/source.sqlite", SQLiteConfig()),
+        pytest.param(
+            (bigquery.Client(), BQConfig()), marks=pytest.mark.bqtest
+        ),
+    ],
+    ids=["sqlite", "bq"],
+)
+def db_host_config(request):
+    """Return a (host, Config) tuple"""
+    return request.param

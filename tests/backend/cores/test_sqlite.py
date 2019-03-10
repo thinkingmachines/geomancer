@@ -10,7 +10,7 @@ from geomancer.backend.cores.sqlite import SQLiteCore
 @pytest.mark.usefixtures("sqlite_config", "sample_points", "table_path")
 def test_sqlitedbcore_load(sqlite_config, sample_points, table_path):
     """Test if load() method returns correct target_uri"""
-    sqlite_core = SQLiteCore(path=table_path)
+    sqlite_core = SQLiteCore(host=table_path)
     target_uri = sqlite_core.load(
         df=sample_points,
         index_label=sqlite_config.INDEX_LABEL,

@@ -10,25 +10,17 @@ from .base import DBCore
 class SQLiteCore(DBCore):
     """SQLite Core with Spatialite Extension"""
 
-    def __init__(self, path):
-        """Initialite the database core
-
-        Parameters
-        ----------
-        path : str
-            Local path to the SQLite database
-        """
-        super(SQLiteCore, self).__init__()
-        self.path = path
+    def __init__(self, host):
+        super(SQLiteCore, self).__init__(host)
         self.prefix = "sqlite:///{}"
-        self.database_uri = self.prefix.format(self.path)
+        self.database_uri = self.prefix.format(self.host)
 
     def load(self, df, index_label=None, index=False, if_exists="replace"):
         """Upload a pandas.DataFrame inside SQLite with a unique 32-char ID"""
 
         # Generate a unique table_id for every dataframe upload job
         table_id = uuid.uuid4().hex
-        conn = sqlite3.connect(self.path)
+        conn = sqlite3.connect(self.host)
 
         # Ensure that spatialite extension is enabled
         conn.enable_load_extension(True)

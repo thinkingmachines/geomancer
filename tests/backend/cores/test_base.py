@@ -14,4 +14,4 @@ def test_load_abstract(sample_points):
         class DummyCore(DBCore):
             pass
 
-        DummyCore()
+        DummyCore(host=":memory:")
