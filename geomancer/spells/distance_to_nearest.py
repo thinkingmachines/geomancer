@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Import modules
-from sqlalchemy import func, literal_column
+from sqlalchemy import func
 from sqlalchemy.sql import select
 
 from .base import Spell
@@ -61,7 +61,7 @@ class DistanceToNearest(Spell):
             ]
         ).select_from(pairs)
         query = select(
-            [literal_column("* EXCEPT (row_number)")],
+            [col for col in query.columns if col.key != "row_number"],
             query.c["row_number"] == 1,
         )
         return query

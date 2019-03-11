@@ -21,7 +21,6 @@ import abc
 # Import modules
 import pandas as pd
 from loguru import logger
-from sqlalchemy import literal_column
 from sqlalchemy.sql import select
 
 from ..backend import get_tables, get_engine
@@ -111,7 +110,7 @@ class Spell(abc.ABC):
             target_df=df,
             engine=engine,
             options=options,
-            host=host
+            host=host,
         )
 
         # Build query
@@ -119,7 +118,7 @@ class Spell(abc.ABC):
 
         # Remove temporary index column
         query = select(
-            [literal_column("* EXCEPT (__index_level_0__)")]
+            [col for col in query.columns if col.key != "__index_level_0__"]
         ).select_from(query)
 
         # Perform query
