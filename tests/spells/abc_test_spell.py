@@ -9,9 +9,6 @@ import pytest
 from pandas import DataFrame
 from sqlalchemy.sql.expression import ClauseElement
 
-# Import from package
-from geomancer import SQLiteConfig
-
 SpellHost = namedtuple("SpellHost", ["spell", "host"])
 
 
@@ -20,7 +17,13 @@ class ABCTestSpell(abc.ABC):
 
     @pytest.fixture
     def spellhost(self):
-        """Return an instance of SpellHost"""
+        """Return an instance of SpellHost
+
+        A spellhost is simply a namedtuple with fields "spell" and "host." The
+        first parameter consists of an initialized instance of the
+        :code:`Spell`, whereas the second one is the :code:`host` from which
+        the spell will be made.
+        """
         raise NotImplementedError
 
     @pytest.mark.usefixtures("spellhost", "sample_points")

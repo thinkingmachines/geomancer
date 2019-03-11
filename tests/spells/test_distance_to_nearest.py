@@ -56,6 +56,9 @@ params = [
 
 
 class TestDistanceToNearest(ABCTestSpell):
-    @pytest.fixture(params=params)
+    @pytest.fixture(
+        params=params,
+        ids=["pois-sqlite", "roads-sqlite", "pois-bq", "roads-bq"],
+    )
     def spellhost(self, request):
         return request.param
