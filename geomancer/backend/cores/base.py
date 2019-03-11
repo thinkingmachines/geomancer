@@ -10,9 +10,23 @@ subclass from the base :code:`DBCore` class and implement the required methods
 # Import standard library
 import abc
 
+# Import modules
+from sqlalchemy.engine import create_engine
+from sqlalchemy.schema import MetaData, Table
+
 
 class DBCore(abc.ABC):
     """Base class for all DBCore implementations"""
+
+    @abc.abstractproperty
+    def database_uri(self):
+        """The complete database URI with prefix"""
+        pass
+
+    @abc.abstractproperty
+    def prefix(self):
+        """The database unique prefix"""
+        pass
 
     @abc.abstractmethod
     def __init__(self, host):
@@ -30,7 +44,19 @@ class DBCore(abc.ABC):
         self.host = host
 
     @abc.abstractmethod
-    def load(self, df, host):
+    def ST_GeoFromText(self, x):
+        """Custom-implementation of the GeoFromTextm method
+
+        This is an abstract method, and must be implemented in each subclass.
+
+        As it turns out, ST_GeogFromText only exists in BigQuery and PostGIS.
+        Only ST_GeomFromText is available for Spatialite. Thus, we need to
+        construct our own GeoFromText method for type-casting
+        """
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def load(self, df):
         """Load a pandas.Dataframe into the Database
 
         This is an abstract method, and must be implemented in each subclass.
@@ -46,3 +72,41 @@ class DBCore(abc.ABC):
             This is an abstract method
         """
         raise NotImplementedError
+
+    def get_tables(self, source_uri, target_df, engine, options):
+        """Create tables given a sqlalchemy.engine.base.Engine
+
+        Parameters
+        -----------
+        source_uri : str
+            Source table URI to run queries against.
+        target_df : pandas.DataFrame
+            Target table to add features to.
+        engine : sqlalchemy.engine.base.Engine
+            Engine with the databse dialect
+        options : geomancer.Config
+            Configuration for interacting with the database backend
+
+        Returns
+        -------
+        (sqlalchemy.schema.Table, sqlalchemy.schema.Table)
+            Source and Target table
+        """
+        target_uri = self.load(df=target_df, **self._inspect_options(options))
+        # Create SQLAlchemy primitives
+        metadata = MetaData(bind=engine)
+        source = Table(source_uri, metadata, autoload=True)
+        target = Table(target_uri, metadata, autoload=True)
+        return source, target
+
+    def get_engine(self):
+        """Get the engine from the DBCore"""
+        return create_engine(self.database_uri)
+
+    def _inspect_options(self, options):
+        """Helper method to return the attribues of a Config"""
+        return dict(
+            (name.lower(), getattr(options, name))
+            for name in dir(options)
+            if not name.startswith("__")
+        )

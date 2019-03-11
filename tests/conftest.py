@@ -16,15 +16,7 @@ def sample_points():
     return df
 
 
-@pytest.fixture(
-    params=[
-        ("tests/data/source.sqlite", SQLiteConfig()),
-        pytest.param(
-            (bigquery.Client(), BQConfig()), marks=pytest.mark.bqtest
-        ),
-    ],
-    ids=["sqlite", "bq"],
-)
-def db_host_config(request):
-    """Return a (host, Config) tuple"""
-    return request.param
+@pytest.fixture
+def table_path():
+    """Return path to SQLite table"""
+    return "tests/data/source.sqlite"

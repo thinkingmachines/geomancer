@@ -2,6 +2,7 @@
 
 # Import standard library
 import abc
+from collections import namedtuple
 
 # Import modules
 import pytest
@@ -10,36 +11,37 @@ from sqlalchemy.sql.expression import ClauseElement
 
 # Import from package
 from geomancer import SQLiteConfig
-from geomancer.backend import get_engine, get_tables
+
+SpellHost = namedtuple("SpellHost", ["spell", "host"])
 
 
 class ABCTestSpell(abc.ABC):
     """Base Test class for all spell implementations"""
 
     @pytest.fixture
-    def spell(self):
-        """Return an instance of the Spell"""
+    def spellhost(self):
+        """Return an instance of SpellHost"""
         raise NotImplementedError
 
-    @pytest.mark.usefixtures("spell", "sample_points", "db_host_config")
-    def test_query_return_type(self, spell, sample_points, db_host_config):
+    @pytest.mark.usefixtures("spellhost", "sample_points")
+    def test_query_return_type(self, spellhost, sample_points):
         """Test if query() returns the correct type"""
-        host, config = db_host_config
-        engine = get_engine(options=config, host=host)
-        source, target = get_tables(
-            source_uri=spell.source_table,
+
+        core = spellhost.spell.core(host=spellhost.host)
+        engine = core.get_engine()
+
+        source, target = core.get_tables(
+            source_uri=spellhost.spell.source_table,
             target_df=sample_points,
             engine=engine,
-            options=SQLiteConfig(),
-            host=host
+            options=spellhost.spell.options,
         )
         # Perform the test
-        query = spell.query(source=source, target=target)
+        query = spellhost.spell.query(source=source, target=target, core=core)
         assert isinstance(query, ClauseElement)
 
-    @pytest.mark.usefixtures("spell", "sample_points", "db_host_config")
-    def test_cast_return_type(self, spell, sample_points, db_host_config):
+    @pytest.mark.usefixtures("spellhost", "sample_points")
+    def test_cast_return_type(self, spellhost, sample_points):
         """Test if cast() returns the correct type"""
-        host, config = db_host_config
-        results = spell.cast(df=sample_points, options=config, host=host)
+        results = spellhost.spell.cast(df=sample_points, host=spellhost.host)
         assert isinstance(results, DataFrame)

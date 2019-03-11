@@ -2,23 +2,29 @@
 
 # Import modules
 import pytest
+from google.cloud import bigquery
+from tests.backend.cores.abc_test_dbcore import ABCTestDBCore
 
 # Import from package
 from geomancer.backend.cores.bq import BigQueryCore
+from geomancer.backend.settings import BQConfig
 
 
 @pytest.mark.bqtest
-@pytest.mark.usefixtures("sample_points", "bq_config", "bq_client")
-def test_bqdbcore_load(sample_points, bq_config, bq_client):
-    """Test if load() method returns correct target_uri"""
-    bq_core = BigQueryCore(host=bq_client)
-    target_uri = bq_core.load(
-        df=sample_points,
-        dataset_id=bq_config.DATASET_ID,
-        expiry=bq_config.EXPIRY,
-        max_retries=bq_config.MAX_RETRIES,
+class TestBigQueryCore(ABCTestDBCore):
+    @pytest.fixture
+    def core(self):
+        return BigQueryCore(host=bigquery.Client())
+
+    @pytest.fixture
+    def config(self):
+        return BQConfig
+
+    @pytest.fixture(
+        params=[
+            "tm-geospatial.osm.gis_osm_pois_free_1",
+            "tm-geospatial.osm.gis_osm_roads_free_1",
+        ]
     )
-    assert isinstance(target_uri, str)
-    assert target_uri == "{}.{}.{}".format(
-        bq_client.project, bq_config.DATASET_ID, target_uri.split(".")[2]
-    )
+    def test_tables(self, request):
+        return request.param

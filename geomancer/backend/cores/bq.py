@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-
 
 # Import standard library
-import uuid
-import time
 import datetime
-import pytz
+import time
+import uuid
 
 # Import modules
-from google.cloud import bigquery
+import pytz
 from google.api_core.exceptions import Conflict
+from google.cloud import bigquery
+from sqlalchemy import func
+
+# Import from package
 from loguru import logger
 
 from .base import DBCore
@@ -28,13 +31,23 @@ class BigQueryCore(DBCore):
         attaches itself to the current active project
     """
 
+    @property
+    def prefix(self):
+        return "bigquery://{}"
+
+    @property
+    def database_uri(self):
+        database_uri = self.prefix.format(self.host.project)
+        logger.debug("Using database_uri: {}".format(database_uri))
+        return database_uri
+
     def __init__(self, host):
         super(BigQueryCore, self).__init__(host)
-        self.prefix = "bigquery://{}"
-        self.database_uri = self.prefix.format(self.host.project)
-        logger.debug("Using database_uri: {}".format(self.database_uri))
 
-    def load(self, df, dataset_id, expiry=3, max_retries=10):
+    def ST_GeoFromText(self, x):
+        return func.ST_GeogFromText(x)
+
+    def load(self, df, dataset_id, expiry=3, max_retries=10, **kwargs):
         """Upload a pandas.DataFrame as a BigQuery table with a unique 32-char ID
 
         Parameters

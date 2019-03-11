@@ -21,24 +21,27 @@ class DistanceToNearest(Spell):
             Look for values within a particular range. Its value is in meters,
             the default is :code:`10,000` meters.
         source_table : str
-            BigQuery table to run queries against.
+            Table URI to run queries against.
         feature_name : str
             Column name for the output feature.
         column : str, optional
-            Column to look the geometries from. The default is :code:`geometry`
+            Column to look the geometries from. The default is :code:`WKT`
+        options : geomancer.Config
+            Specify configuration for interacting with the database backend.
+            Default is a BigQuery Configuration
         """
         super(DistanceToNearest, self).__init__(**kwargs)
         self.on = on
         self.within = within
 
-    def query(self, source, target):
+    def query(self, source, target, core):
         # Get all POIs of fclass `on`
         pois = select(
             [source.c.osm_id, source.c.WKT], source.c.fclass == self.on
         ).cte("pois")
         # Compute the distance from `column` to each POI within given distance
         distance = func.ST_Distance(
-            func.ST_GeogFromText(target.c[self.column]), pois.c.WKT
+            core.ST_GeoFromText(target.c[self.column]), pois.c.WKT
         )
         pairs = (
             select(
