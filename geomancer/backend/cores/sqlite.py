@@ -55,13 +55,19 @@ class SQLiteCore(DBCore):
         return table_id
 
     def _load_spatialite(self, conn):
-        """Load mod_spatialite.so or libspatialite.so"""
+        """Load mod_spatialite or libspatialite"""
+        import platform
+        ext = {
+            "Darwin": "dylib",
+            "Linux": "so",
+            "Windows": "dll",
+        }[platform.system()]
         try:
-            conn.load_extension("mod_spatialite.so")
-            logger.trace("Using mod_spatialite.so")
+            conn.load_extension("mod_spatialite." + ext)
+            logger.trace("Using mod_spatialite." + ext)
         except sqlite3.OperationalError:
-            conn.load_extension("libspatialite.so")
-            logger.trace("Using libspatialite.so")
+            conn.load_extension("libspatialite." + ext)
+            logger.trace("Using libspatialite." + ext)
 
     def _connection_listener(self, conn, record):
         """Loads spatialite whenever a connection is detected"""
