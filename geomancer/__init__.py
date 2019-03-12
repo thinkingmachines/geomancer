@@ -2,7 +2,10 @@
 
 """Geomancer"""
 
+import os
 from .backend.settings import BQConfig, SQLiteConfig
+
+os.environ["LOGURU_LEVEL"] = "INFO"
 
 __version__ = "1.0.0-alpha"
 __author__ = "Thinking Machines Data Science"
