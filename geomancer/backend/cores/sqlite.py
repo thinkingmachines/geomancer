@@ -40,10 +40,6 @@ class SQLiteCore(DBCore):
         table_id = uuid.uuid4().hex
         conn = sqlite3.connect(self.host)
 
-        # Ensure that spatialite extension is enabled
-        conn.enable_load_extension(True)
-        self._load_spatialite(conn)
-
         # Here we're mimicking BQ client by implicitly creating a column
         # __index_level_0__ via the pyarrow dependency
         df = df.reset_index()
