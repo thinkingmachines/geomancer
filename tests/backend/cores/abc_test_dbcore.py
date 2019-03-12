@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Import standard library
-import abc
+import uuid
 
 # Import modules
 import pytest
@@ -9,7 +9,7 @@ from sqlalchemy.engine.base import Engine
 from sqlalchemy.schema import Table
 
 
-class ABCTestDBCore(abc.ABC):
+class ABCTestDBCore:
     """Base Test class for all DBCore implementations"""
 
     @pytest.fixture
@@ -31,10 +31,10 @@ class ABCTestDBCore(abc.ABC):
         assert isinstance(engine, Engine)
 
     @pytest.mark.usefixtures("core", "config", "sample_points", "test_tables")
-    def test_get_tables_return_type(
+    def test_get_tables_source_name(
         self, core, config, sample_points, test_tables
     ):
-        """Test if get_tables() returns appropriate type"""
+        """Test if source table name is the same as input"""
         engine = core.get_engine()
         source, target = core.get_tables(
             source_uri=test_tables,
@@ -42,8 +42,49 @@ class ABCTestDBCore(abc.ABC):
             engine=engine,
             options=config,
         )
-        assert isinstance(source, Table)
-        assert isinstance(target, Table)
+        assert test_tables == source.name
+
+    @pytest.mark.usefixtures("core", "config", "sample_points", "test_tables")
+    def test_get_tables_target_valid_uuid(
+        self, core, config, sample_points, test_tables
+    ):
+        """Test if target table name is a valid UUID v4"""
+        engine = core.get_engine()
+        source, target = core.get_tables(
+            source_uri=test_tables,
+            target_df=sample_points,
+            engine=engine,
+            options=config,
+        )
+
+        def is_valid_uuid(name):
+            """Validate if name is a UUID"""
+            try:
+                # This should work for BQ tables
+                name_ = name.split(".")[-1]
+                uuid_obj = uuid.UUID(name_, version=4)
+            except ValueError:
+                return False
+            return uuid_obj.hex == name_
+
+        assert is_valid_uuid(target.name)
+
+    @pytest.mark.usefixtures("core", "config", "sample_points", "test_tables")
+    def test_get_tables_target_column_names(
+        self, core, config, sample_points, test_tables
+    ):
+        """Test if target column names is as expected"""
+        engine = core.get_engine()
+        source, target = core.get_tables(
+            source_uri=test_tables,
+            target_df=sample_points,
+            engine=engine,
+            options=config,
+        )
+        expected = sample_points.columns.to_list()
+        assert set(expected).issubset(
+            set([col.name for col in target.columns])
+        )
 
     @pytest.mark.usefixtures("core", "config", "sample_points")
     def test_load(self, core, config, sample_points):
