@@ -37,8 +37,15 @@ class BigQueryCore(DBCore):
 
     @property
     def database_uri(self):
-        database_uri = self.prefix.format(self.host.project)
-        logger.debug("Using database_uri: {}".format(database_uri))
+        try:
+            database_uri = self.prefix.format(self.host.project)
+            logger.debug("Using database_uri: {}".format(database_uri))
+        except KeyError:
+            logger.exception(
+                "A BigQuery backend requires a BQ client as its host. If you "
+                "wish to use another data warehouse, then pass the "
+                "appropriate configuration to `options`."
+            )
         return database_uri
 
     def __init__(self, host):

@@ -21,6 +21,13 @@ class SQLiteCore(DBCore):
 
     @property
     def database_uri(self):
+        if not isinstance(self.host, str):
+            logger.error(
+                "A SQLite host should take in the path to the *.sqlite"
+                "database, If you wish to use another data warehouse, "
+                "then pass the appropriate configuration to `options`"
+            )
+            raise TypeError
         database_uri = self.prefix.format(self.host)
         logger.debug("Using database_uri: {}".format(database_uri))
         return database_uri
@@ -53,11 +60,10 @@ class SQLiteCore(DBCore):
     def _load_spatialite(self, conn):
         """Load mod_spatialite or libspatialite"""
         import platform
-        ext = {
-            "Darwin": ".dylib",
-            "Linux": ".so",
-            "Windows": ".dll",
-        }[platform.system()]
+
+        ext = {"Darwin": ".dylib", "Linux": ".so", "Windows": ".dll"}[
+            platform.system()
+        ]
         try:
             conn.load_extension("mod_spatialite" + ext)
             logger.trace("Using mod_spatialite" + ext)
