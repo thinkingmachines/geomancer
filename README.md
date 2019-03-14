@@ -2,9 +2,10 @@
 
 [![Build Status](https://travis-ci.org/thinkingmachines/geomancer.svg?branch=master)](https://travis-ci.org/thinkingmachines/geomancer)
 
-Geomancer is a geospatial feature engineering Python package for OpenStreetMap
-(OSM) data that are saved in a data warehouse. This project is currently in
-pre-alpha and is under active development.
+Geomancer is a feature engineering library for geospatial data. It leverages
+[OpenStreetMap (OSM)](https://www.openstreetmap.org/) alongside a data
+warehouse like BigQuery. This project is currently in pre-alpha and is under
+active development.
 
 
 ## Features
@@ -13,7 +14,7 @@ Geomancer can perform OSM feature engineering for all types of vector data
 (i.e. points, lines, polygons). 
 
 - Feature primitives for geospatial feature engineering
-- Ability to switch out data warehouses (BigQuery, SQLite, PostreSQL (*In Progress*))  
+- Ability to switch out data warehouses (BigQuery, SQLite, PostgreSQL (*In Progress*))  
 - Compile and share your features (*In Progress*)
 
 
@@ -65,16 +66,16 @@ Request](https://help.github.com/en/articles/creating-a-pull-request).
 
 Simply fork this repository and make a Pull Request! We'd definitely appreciate:
 
-- Implementation of some open-source software metrics
-- Proposal for new metrics
+- Implementation of new features
+- Bug Reports
 - Documentation
 - Testing
 
 Also, we have a
-[CONTRIBUTING.md](https://github.com/thinkingmachines/geomancer/CONTRIBUTING.MD)
+[CONTRIBUTING.md](https://github.com/thinkingmachines/geomancer/blob/master/CONTRIBUTING.md)
 and a [Code of
-Conduct](https://github.com/thinkingmachines/geomancer/CODE_OF_CONDUCT.md), so
-please check that one out!
+Conduct](https://github.com/thinkingmachines/geomancer/blob/master/CODE_OF_CONDUCT.md),
+so please check that one out!
 
 ## License
 
