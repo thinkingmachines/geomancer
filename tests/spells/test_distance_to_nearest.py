@@ -43,7 +43,7 @@ params = [
     pytest.param(
         SpellHost(
             spell=DistanceToNearest(
-                on="embassy",
+                on="primary",
                 source_table="tm-geospatial.osm.gis_osm_roads_free_1",
                 feature_name="dist_primary",
                 options=BQConfig(),
