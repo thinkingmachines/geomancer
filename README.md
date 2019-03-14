@@ -1,4 +1,6 @@
-# Geomancer
+# geomancer
+
+[![Build Status](https://travis-ci.org/thinkingmachines/geomancer.svg?branch=master)](https://travis-ci.org/thinkingmachines/geomancer)
 
 [![Build Status](https://travis-ci.org/thinkingmachines/geomancer.svg?branch=master)](https://travis-ci.org/thinkingmachines/geomancer)
 
