@@ -2,8 +2,6 @@
 
 [![Build Status](https://travis-ci.org/thinkingmachines/geomancer.svg?branch=master)](https://travis-ci.org/thinkingmachines/geomancer)
 
-[![Build Status](https://travis-ci.org/thinkingmachines/geomancer.svg?branch=master)](https://travis-ci.org/thinkingmachines/geomancer)
-
 Geomancer is a geospatial feature engineering Python package for OpenStreetMap
 (OSM) data that are saved in a data warehouse. This project is currently in
 pre-alpha and is under active development.

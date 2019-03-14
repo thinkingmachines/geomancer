@@ -3,7 +3,7 @@
 # Import modules
 import pytest
 from google.cloud import bigquery
-from tests.backend.cores.abc_test_dbcore import ABCTestDBCore
+from tests.backend.cores.base_test_dbcore import BaseTestDBCore
 
 # Import from package
 from geomancer.backend.cores.bq import BigQueryCore
@@ -11,7 +11,7 @@ from geomancer.backend.settings import BQConfig
 
 
 @pytest.mark.bqtest
-class TestBigQueryCore(ABCTestDBCore):
+class TestBigQueryCore(BaseTestDBCore):
     @pytest.fixture
     def core(self):
         return BigQueryCore(host=bigquery.Client())

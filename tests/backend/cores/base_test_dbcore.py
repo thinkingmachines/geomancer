@@ -6,10 +6,9 @@ import uuid
 # Import modules
 import pytest
 from sqlalchemy.engine.base import Engine
-from sqlalchemy.schema import Table
 
 
-class ABCTestDBCore:
+class BaseTestDBCore:
     """Base Test class for all DBCore implementations"""
 
     @pytest.fixture

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 # Import standard library
-import abc
 from collections import namedtuple
 
 # Import modules
@@ -12,7 +11,7 @@ from sqlalchemy.sql.expression import ClauseElement
 SpellHost = namedtuple("SpellHost", ["spell", "host"])
 
 
-class ABCTestSpell(abc.ABC):
+class BaseTestSpell:
     """Base Test class for all spell implementations"""
 
     @pytest.fixture

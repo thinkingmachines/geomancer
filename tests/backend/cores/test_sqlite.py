@@ -2,14 +2,14 @@
 
 # Import modules
 import pytest
-from tests.backend.cores.abc_test_dbcore import ABCTestDBCore
+from tests.backend.cores.base_test_dbcore import BaseTestDBCore
 
 # Import from package
 from geomancer.backend.cores.sqlite import SQLiteCore
 from geomancer.backend.settings import SQLiteConfig
 
 
-class TestSQLiteCore(ABCTestDBCore):
+class TestSQLiteCore(BaseTestDBCore):
     @pytest.fixture
     def core(self):
         return SQLiteCore(host="tests/data/source.sqlite")

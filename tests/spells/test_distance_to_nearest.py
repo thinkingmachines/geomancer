@@ -3,7 +3,7 @@
 # Import modules
 import pytest
 from google.cloud import bigquery
-from tests.spells.abc_test_spell import ABCTestSpell, SpellHost
+from tests.spells.base_test_spell import BaseTestSpell, SpellHost
 
 # Import from package
 from geomancer.backend.settings import BQConfig, SQLiteConfig
@@ -55,7 +55,7 @@ params = [
 ]
 
 
-class TestDistanceToNearest(ABCTestSpell):
+class TestDistanceToNearest(BaseTestSpell):
     @pytest.fixture(
         params=params,
         ids=["pois-sqlite", "roads-sqlite", "pois-bq", "roads-bq"],
