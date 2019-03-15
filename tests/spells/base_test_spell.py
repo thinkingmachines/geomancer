@@ -47,3 +47,9 @@ class BaseTestSpell:
         """Test if cast() returns the correct type"""
         results = spellhost.spell.cast(df=sample_points, host=spellhost.host)
         assert isinstance(results, DataFrame)
+
+    @pytest.mark.usefixtures("spellhost", "sample_points")
+    def test_cast_return_not_empty(self, spellhost, sample_points):
+        """Test if cast() returns a set of values. All our test cases should not be empty"""
+        results = spellhost.spell.cast(df=sample_points, host=spellhost.host)
+        assert results.values.size != 0

@@ -22,8 +22,8 @@ class TestBigQueryCore(BaseTestDBCore):
 
     @pytest.fixture(
         params=[
-            "tm-geospatial.osm.gis_osm_pois_free_1",
-            "tm-geospatial.osm.gis_osm_roads_free_1",
+            "tm-geospatial.ph_osm.gis_osm_pois_free_1",
+            "tm-geospatial.ph_osm.gis_osm_roads_free_1",
         ]
     )
     def test_tables(self, request):

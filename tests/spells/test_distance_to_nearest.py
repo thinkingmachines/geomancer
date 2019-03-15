@@ -32,7 +32,7 @@ params = [
         SpellHost(
             spell=DistanceToNearest(
                 on="embassy",
-                source_table="tm-geospatial.osm.gis_osm_pois_free_1",
+                source_table="tm-geospatial.ph_osm.gis_osm_pois_free_1",
                 feature_name="dist_embassy",
                 options=BQConfig(),
             ),
@@ -44,7 +44,7 @@ params = [
         SpellHost(
             spell=DistanceToNearest(
                 on="primary",
-                source_table="tm-geospatial.osm.gis_osm_roads_free_1",
+                source_table="tm-geospatial.ph_osm.gis_osm_roads_free_1",
                 feature_name="dist_primary",
                 options=BQConfig(),
             ),

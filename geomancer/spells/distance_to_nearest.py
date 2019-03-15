@@ -41,7 +41,8 @@ class DistanceToNearest(Spell):
         ).cte("pois")
         # Compute the distance from `column` to each POI within given distance
         distance = func.ST_Distance(
-            core.ST_GeoFromText(target.c[self.column]), pois.c.WKT
+            core.ST_GeoFromText(target.c[self.column]),
+            core.ST_GeoFromText(pois.c.WKT),
         )
         pairs = (
             select(
