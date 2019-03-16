@@ -1,0 +1,12 @@
+kind: pipeline
+name: python3.6
+
+steps:
+- name: test
+  image: python:3.6-alpine
+  commands:
+  - wget -O tests/data/source.sqlite https://storage.googleapis.com/tm-geomancer/test/source.sqlite
+  - pip install -r requirements-dev.txt
+  - pytest -m "not bqtest" tests/
+
+
