@@ -8,7 +8,7 @@ matrix:
     python: "3.6"
 
 before_install:
-  - sudo ci/travis_before_install.sh
+  - sudo ci/install.sh
 
 install:
   - make travis

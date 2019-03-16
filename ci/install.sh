@@ -8,6 +8,5 @@ Pin: release n=sqlite3
 Pin-Priority: 900
 EOF
 apt-get -qq update
-
 apt-get -y --allow-unauthenticated install sqlite3 libsqlite3-mod-spatialite
 
