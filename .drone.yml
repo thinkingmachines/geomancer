@@ -3,10 +3,9 @@ name: python3.6
 
 steps:
 - name: test
-  image: python:3.6-alpine
+  image: python:3.6-stretch
   commands:
   - wget -O tests/data/source.sqlite https://storage.googleapis.com/tm-geomancer/test/source.sqlite
+  - ci/install.sh
   - pip install -r requirements-dev.txt
   - pytest -m "not bqtest" tests/
-
-
