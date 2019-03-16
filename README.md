@@ -26,18 +26,23 @@ Geomancer can be installed using `pip`.
 $ pip install geomancer
 ```
 
-Alternatively, you can also clone the repository then run install.
+This will install **all** dependencies for every data-warehouse we support. If
+you wish to do this only for a specific warehouse, then you can add an
+identifier:
+
+```
+$ pip install geomancer[bq] # For BigQuery
+$ pip install geomancer[sqlite] # For Spatialite
+$ pip install geomancer[psql] # For PostGresSQL
+```
+
+Alternatively, you can also clone the repository then run `install`.
 
 ```
 $ git clone https://github.com/thinkingmachines/geomancer.git
 $ cd geomancer
 $ python setup.py install
 ``` 
-
-The dependencies will be different depending on what data warehouse backend you
-use. For example, if you'll be using SQLite, you won't need
-`google-cloud-bigquery`. The comprehensive list of dependencies can be found in
-`requirements.in`.
 
 ## Basic Usage
 
