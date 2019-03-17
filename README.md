@@ -1,6 +1,6 @@
 # geomancer
 
-[![Build Status](https://travis-ci.org/thinkingmachines/geomancer.svg?branch=master)](https://travis-ci.org/thinkingmachines/geomancer)
+[![Build Status](https://cloud.drone.io/api/badges/thinkingmachines/geomancer/status.svg)](https://cloud.drone.io/thinkingmachines/geomancer)
 
 Geomancer is a feature engineering library for geospatial data. It leverages
 [OpenStreetMap (OSM)](https://www.openstreetmap.org/) alongside a data
