@@ -1,6 +1,8 @@
 # geomancer
 
 [![Build Status](https://cloud.drone.io/api/badges/thinkingmachines/geomancer/status.svg)](https://cloud.drone.io/thinkingmachines/geomancer)
+[![PyPI version](https://badge.fury.io/py/geomancer.svg)](https://badge.fury.io/py/geomancer)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Geomancer is a feature engineering library for geospatial data. It leverages
 [OpenStreetMap (OSM)](https://www.openstreetmap.org/) alongside a data
