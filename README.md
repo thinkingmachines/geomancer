@@ -53,14 +53,14 @@ example, you want to get the distance to the nearest supermarket for each
 point.
 
 ```python
-from geomancer.spells import distance_to_nearest
+from geomancer.spells import DistanceToNearest
 from google.cloud import bigquery # Using BigQuery backend
 
 # Load the dataset in a pandas dataframe 
 # df = load_dataset()
 
 dist_supermarket = DistanceToNearest('supermarket',
-                                     source_table='osm.gis_osm_pois_free_1',
+                                     source_table='ph_osm.gis_osm_pois_free_1',
                                      feature_name='dist_supermarket').cast(df, host=bigquery.Client())
 ```
 
