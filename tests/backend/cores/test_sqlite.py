@@ -12,7 +12,7 @@ from geomancer.backend.settings import SQLiteConfig
 class TestSQLiteCore(BaseTestDBCore):
     @pytest.fixture
     def core(self):
-        return SQLiteCore(host="tests/data/source.sqlite")
+        return SQLiteCore("sqlite:///tests/data/source.sqlite")
 
     @pytest.fixture
     def config(self):

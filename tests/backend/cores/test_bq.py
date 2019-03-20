@@ -14,7 +14,7 @@ from geomancer.backend.settings import BQConfig
 class TestBigQueryCore(BaseTestDBCore):
     @pytest.fixture
     def core(self):
-        return BigQueryCore(host=bigquery.Client())
+        return BigQueryCore("bigquery://tm-geospatial")
 
     @pytest.fixture
     def config(self):

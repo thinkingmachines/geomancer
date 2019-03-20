@@ -2,53 +2,52 @@
 
 # Import modules
 import pytest
-from google.cloud import bigquery
-from tests.spells.base_test_spell import BaseTestSpell, SpellHost
+from tests.spells.base_test_spell import BaseTestSpell, SpellDB
 
 # Import from package
 from geomancer.backend.settings import BQConfig, SQLiteConfig
 from geomancer.spells import DistanceToNearest
 
 params = [
-    SpellHost(
+    SpellDB(
         spell=DistanceToNearest(
             on="embassy",
             source_table="gis_osm_pois_free_1",
             feature_name="dist_embassy",
             options=SQLiteConfig(),
         ),
-        host="tests/data/source.sqlite",
+        dburl="sqlite:///tests/data/source.sqlite",
     ),
-    SpellHost(
+    SpellDB(
         spell=DistanceToNearest(
             on="primary",
             source_table="gis_osm_roads_free_1",
             feature_name="dist_primary",
             options=SQLiteConfig(),
         ),
-        host="tests/data/source.sqlite",
+        dburl="sqlite:///tests/data/source.sqlite",
     ),
     pytest.param(
-        SpellHost(
+        SpellDB(
             spell=DistanceToNearest(
                 on="embassy",
                 source_table="tm-geospatial.ph_osm.gis_osm_pois_free_1",
                 feature_name="dist_embassy",
                 options=BQConfig(),
             ),
-            host=bigquery.Client,
+            dburl="bigquery://tm-geospatial",
         ),
         marks=pytest.mark.bqtest,
     ),
     pytest.param(
-        SpellHost(
+        SpellDB(
             spell=DistanceToNearest(
                 on="primary",
                 source_table="tm-geospatial.ph_osm.gis_osm_roads_free_1",
                 feature_name="dist_primary",
                 options=BQConfig(),
             ),
-            host=bigquery.Client,
+            dburl="bigquery://tm-geospatial",
         ),
         marks=pytest.mark.bqtest,
     ),
@@ -60,5 +59,5 @@ class TestDistanceToNearest(BaseTestSpell):
         params=params,
         ids=["pois-sqlite", "roads-sqlite", "pois-bq", "roads-bq"],
     )
-    def spellhost(self, request):
+    def spelldb(self, request):
         return request.param

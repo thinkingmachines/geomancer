@@ -9,10 +9,9 @@ import uuid
 import pytz
 from google.api_core.exceptions import Conflict
 from google.cloud import bigquery
-from sqlalchemy import func
-
-# Import from package
 from loguru import logger
+from sqlalchemy import func
+from sqlalchemy.engine.url import make_url
 
 from .base import DBCore
 
@@ -22,34 +21,18 @@ class BigQueryCore(DBCore):
 
     Attributes
     ----------
-    host : google.cloud.client.Client
+    client : google.cloud.client.Client
         BigQuery client for handling BQ interactions
-    prefix : str
-        Prefix for a BigQuery database
-    database_uri : str
-        Specific URI for a given database. Automatically
-        attaches itself to the current active project
     """
 
-    @property
-    def prefix(self):
-        return "bigquery://{}"
-
-    @property
-    def database_uri(self):
-        try:
-            database_uri = self.prefix.format(self.host.project)
-            logger.debug("Using database_uri: {}".format(database_uri))
-        except KeyError:
-            logger.exception(
-                "A BigQuery backend requires a BQ client as its host. If you "
-                "wish to use another data warehouse, then pass the "
-                "appropriate configuration to `options`."
-            )
-        return database_uri
-
-    def __init__(self, host):
-        super(BigQueryCore, self).__init__(host)
+    def __init__(self, dburl):
+        super(BigQueryCore, self).__init__(dburl)
+        url = make_url(self.dburl)
+        self.client = bigquery.Client(
+            project=url.host,
+            credentials=url.query.get("credentials_path"),
+            location=url.query.get("location"),
+        )
 
     def ST_GeoFromText(self, x):
         return func.ST_GeogFromText(x)
@@ -83,7 +66,7 @@ class BigQueryCore(DBCore):
         table_ref = dataset.table(table_id)
 
         # Run job
-        job = self.host.load_table_from_dataframe(df, table_ref)
+        job = self.client.load_table_from_dataframe(df, table_ref)
 
         # Create full table path
         table_path = "{}.{}.{}".format(
@@ -119,12 +102,12 @@ class BigQueryCore(DBCore):
         expiry : int
             Expiration in hours
         """
-        table = self.host.get_table(table_ref)
+        table = self.client.get_table(table_ref)
         expiration = datetime.datetime.now(pytz.utc) + datetime.timedelta(
             hours=expiry
         )
         table.expires = expiration
-        self.host.update_table(table, ["expires"])
+        self.client.update_table(table, ["expires"])
         logger.debug("Table will expire in {} hour/s".format(expiry))
 
     def _fetch_dataset(self, dataset_id):
@@ -140,11 +123,11 @@ class BigQueryCore(DBCore):
         google.cloud.bigquery.dataset.Dataset
             The Dataset class to build tables from
         """
-        dataset_ref = self.host.dataset(dataset_id)
+        dataset_ref = self.client.dataset(dataset_id)
         dataset = bigquery.Dataset(dataset_ref)
         try:
-            dataset = self.host.create_dataset(dataset)
+            dataset = self.client.create_dataset(dataset)
         except Conflict:
-            dataset = self.host.get_dataset(dataset_ref)
+            dataset = self.client.get_dataset(dataset_ref)
 
         return dataset

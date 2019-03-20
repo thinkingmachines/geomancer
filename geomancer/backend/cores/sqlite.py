@@ -7,6 +7,7 @@ import uuid
 # Import modules
 from loguru import logger
 from sqlalchemy import create_engine, event
+from sqlalchemy.engine.url import make_url
 from sqlalchemy.sql import func
 
 from .base import DBCore
@@ -15,25 +16,8 @@ from .base import DBCore
 class SQLiteCore(DBCore):
     """SQLite Core with Spatialite Extension"""
 
-    @property
-    def prefix(self):
-        return "sqlite:///{}"
-
-    @property
-    def database_uri(self):
-        if not isinstance(self.host, str):
-            logger.error(
-                "A SQLite host should take in the path to the *.sqlite"
-                "database, If you wish to use another data warehouse, "
-                "then pass the appropriate configuration to `options`"
-            )
-            raise TypeError
-        database_uri = self.prefix.format(self.host)
-        logger.debug("Using database_uri: {}".format(database_uri))
-        return database_uri
-
-    def __init__(self, host):
-        super(SQLiteCore, self).__init__(host)
+    def __init__(self, dburl):
+        super(SQLiteCore, self).__init__(dburl)
 
     def ST_GeoFromText(self, x):
         return func.ST_GeomFromText(x, 4326)
@@ -45,7 +29,8 @@ class SQLiteCore(DBCore):
 
         # Generate a unique table_id for every dataframe upload job
         table_id = uuid.uuid4().hex
-        conn = sqlite3.connect(self.host)
+        url = make_url(self.dburl)
+        conn = sqlite3.connect(url.database)
 
         # Here we're mimicking BQ client by implicitly creating a column
         # __index_level_0__ via the pyarrow dependency
@@ -74,6 +59,6 @@ class SQLiteCore(DBCore):
 
     def get_engine(self):
         """Get the engine from the DBCore and load spatialite"""
-        engine = create_engine(self.database_uri)
+        engine = create_engine(self.dburl)
         event.listen(engine, "connect", self._connection_listener)
         return engine

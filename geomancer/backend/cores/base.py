@@ -18,30 +18,16 @@ from sqlalchemy.schema import MetaData, Table
 class DBCore(abc.ABC):
     """Base class for all DBCore implementations"""
 
-    @abc.abstractproperty
-    def database_uri(self):
-        """The complete database URI with prefix"""
-        pass
-
-    @abc.abstractproperty
-    def prefix(self):
-        """The database unique prefix"""
-        pass
-
     @abc.abstractmethod
-    def __init__(self, host):
+    def __init__(self, dburl):
         """Initialize the database core
 
         Parameters
         ----------
-        host : google.cloud.client.Client or str
-            Object where requests will be passed onto. If the backend database:
-                * is **BigQuery**, then a :code:`google.cloud.client.Client`
-                must be passed.
-                * is **SQLite**, then a :code:`str` that points to the SQLite
-                database must be passed.
+        dburl : str
+            Database url used to configure backend connection
         """
-        self.host = host
+        self.dburl = dburl
 
     @abc.abstractmethod
     def ST_GeoFromText(self, x):
@@ -101,7 +87,7 @@ class DBCore(abc.ABC):
 
     def get_engine(self):
         """Get the engine from the DBCore"""
-        return create_engine(self.database_uri)
+        return create_engine(self.dburl)
 
     def _inspect_options(self, options):
         """Helper method to return the attribues of a Config"""

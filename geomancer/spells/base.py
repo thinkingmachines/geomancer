@@ -86,7 +86,7 @@ class Spell(abc.ABC):
         raise NotImplementedError
 
     @logger.catch
-    def cast(self, df, host):
+    def cast(self, df, dburl):
         """Apply the feature transform to an input pandas.DataFrame
 
         If using BigQuery, a :code:`google.cloud.client.Client`
@@ -98,19 +98,15 @@ class Spell(abc.ABC):
             Dataframe containing the points to compare upon. By default, we
             will look into the :code:`geometry` column. You can specify your
             own column by passing an argument to the :code:`column` parameter.
-        host : google.cloud.client.Client or str
-            Object where requests will be passed onto. If the backend database:
-                * is **BigQuery**, then a :code:`google.cloud.client.Client`
-                must be passed.
-                * is **SQLite**, then a :code:`str` that points to the SQLite
-                database must be passed.
+        dburl : str
+            Database url used to configure backend connection
 
         Returns
         -------
         pandas.DataFrame
             Output dataframe with the features per given point
         """
-        core = self.core(host=host)
+        core = self.core(dburl=dburl)
 
         # Get engine
         engine = core.get_engine()
