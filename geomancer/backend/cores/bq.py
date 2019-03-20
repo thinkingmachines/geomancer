@@ -11,7 +11,6 @@ from google.api_core.exceptions import Conflict
 from google.cloud import bigquery
 from loguru import logger
 from sqlalchemy import func
-from sqlalchemy.engine.url import make_url
 
 from .base import DBCore
 
@@ -25,13 +24,12 @@ class BigQueryCore(DBCore):
         BigQuery client for handling BQ interactions
     """
 
-    def __init__(self, dburl):
-        super(BigQueryCore, self).__init__(dburl)
-        url = make_url(self.dburl)
+    def __init__(self, dburl, options=None):
+        super(BigQueryCore, self).__init__(dburl, options)
         self.client = bigquery.Client(
-            project=url.host,
-            credentials=url.query.get("credentials_path"),
-            location=url.query.get("location"),
+            project=self.dburl.host,
+            credentials=self.dburl.query.get("credentials_path"),
+            location=self.dburl.query.get("location"),
         )
 
     def ST_GeoFromText(self, x):

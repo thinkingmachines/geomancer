@@ -29,14 +29,13 @@ class BaseTestSpell:
     def test_query_return_type(self, spelldb, sample_points):
         """Test if query() returns the correct type"""
 
-        core = spelldb.spell.core(spelldb.dburl)
+        core = spelldb.spell.get_core(spelldb.dburl)
         engine = core.get_engine()
 
         source, target = core.get_tables(
             source_uri=spelldb.spell.source_table,
             target_df=sample_points,
             engine=engine,
-            options=spelldb.spell.options,
         )
         # Perform the test
         query = spelldb.spell.query(source=source, target=target, core=core)

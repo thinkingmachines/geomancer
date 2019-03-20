@@ -7,7 +7,6 @@ import uuid
 # Import modules
 from loguru import logger
 from sqlalchemy import create_engine, event
-from sqlalchemy.engine.url import make_url
 from sqlalchemy.sql import func
 
 from .base import DBCore
@@ -16,8 +15,8 @@ from .base import DBCore
 class SQLiteCore(DBCore):
     """SQLite Core with Spatialite Extension"""
 
-    def __init__(self, dburl):
-        super(SQLiteCore, self).__init__(dburl)
+    def __init__(self, dburl, options=None):
+        super(SQLiteCore, self).__init__(dburl, options)
 
     def ST_GeoFromText(self, x):
         return func.ST_GeomFromText(x, 4326)
@@ -29,8 +28,7 @@ class SQLiteCore(DBCore):
 
         # Generate a unique table_id for every dataframe upload job
         table_id = uuid.uuid4().hex
-        url = make_url(self.dburl)
-        conn = sqlite3.connect(url.database)
+        conn = sqlite3.connect(self.dburl.database)
 
         # Here we're mimicking BQ client by implicitly creating a column
         # __index_level_0__ via the pyarrow dependency

@@ -6,7 +6,6 @@ from google.cloud import bigquery
 from tests.spells.base_test_spell import BaseTestSpell, SpellDB
 
 # Import from package
-from geomancer.backend.settings import BQConfig, SQLiteConfig
 from geomancer.spells import NumberOf
 
 params = [
@@ -15,7 +14,6 @@ params = [
             on="embassy",
             source_table="gis_osm_pois_free_1",
             feature_name="num_embassy",
-            options=SQLiteConfig(),
         ),
         dburl="sqlite:///tests/data/source.sqlite",
     ),
@@ -24,7 +22,6 @@ params = [
             on="primary",
             source_table="gis_osm_roads_free_1",
             feature_name="num_primary",
-            options=SQLiteConfig(),
         ),
         dburl="sqlite:///tests/data/source.sqlite",
     ),
@@ -34,7 +31,6 @@ params = [
                 on="embassy",
                 source_table="tm-geospatial.ph_osm.gis_osm_pois_free_1",
                 feature_name="num_embassy",
-                options=BQConfig(),
             ),
             dburl="bigquery://tm-geospatial",
         ),
@@ -46,7 +42,6 @@ params = [
                 on="primary",
                 source_table="tm-geospatial.ph_osm.gis_osm_roads_free_1",
                 feature_name="num_primary",
-                options=BQConfig(),
             ),
             dburl="bigquery://tm-geospatial",
         ),

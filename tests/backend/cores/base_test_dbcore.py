@@ -16,10 +16,6 @@ class BaseTestDBCore:
         raise NotImplementedError
 
     @pytest.fixture
-    def config(self):
-        raise NotImplementedError
-
-    @pytest.fixture
     def test_tables(self):
         raise NotImplementedError
 
@@ -29,31 +25,23 @@ class BaseTestDBCore:
         engine = core.get_engine()
         assert isinstance(engine, Engine)
 
-    @pytest.mark.usefixtures("core", "config", "sample_points", "test_tables")
-    def test_get_tables_source_name(
-        self, core, config, sample_points, test_tables
-    ):
+    @pytest.mark.usefixtures("core", "sample_points", "test_tables")
+    def test_get_tables_source_name(self, core, sample_points, test_tables):
         """Test if source table name is the same as input"""
         engine = core.get_engine()
         source, target = core.get_tables(
-            source_uri=test_tables,
-            target_df=sample_points,
-            engine=engine,
-            options=config,
+            source_uri=test_tables, target_df=sample_points, engine=engine
         )
         assert test_tables == source.name
 
-    @pytest.mark.usefixtures("core", "config", "sample_points", "test_tables")
+    @pytest.mark.usefixtures("core", "sample_points", "test_tables")
     def test_get_tables_target_valid_uuid(
-        self, core, config, sample_points, test_tables
+        self, core, sample_points, test_tables
     ):
         """Test if target table name is a valid UUID v4"""
         engine = core.get_engine()
         source, target = core.get_tables(
-            source_uri=test_tables,
-            target_df=sample_points,
-            engine=engine,
-            options=config,
+            source_uri=test_tables, target_df=sample_points, engine=engine
         )
 
         def is_valid_uuid(name):
@@ -68,25 +56,29 @@ class BaseTestDBCore:
 
         assert is_valid_uuid(target.name)
 
-    @pytest.mark.usefixtures("core", "config", "sample_points", "test_tables")
+    @pytest.mark.usefixtures("core", "sample_points", "test_tables")
     def test_get_tables_target_column_names(
-        self, core, config, sample_points, test_tables
+        self, core, sample_points, test_tables
     ):
         """Test if target column names is as expected"""
         engine = core.get_engine()
         source, target = core.get_tables(
-            source_uri=test_tables,
-            target_df=sample_points,
-            engine=engine,
-            options=config,
+            source_uri=test_tables, target_df=sample_points, engine=engine
         )
         expected = sample_points.columns.to_list()
         assert set(expected).issubset(
             set([col.name for col in target.columns])
         )
 
-    @pytest.mark.usefixtures("core", "config", "sample_points")
-    def test_load(self, core, config, sample_points):
+    @pytest.mark.usefixtures("core", "sample_points")
+    def test_load(self, core, sample_points):
         """Test if load() method returns appropriate type"""
-        target_uri = core.load(sample_points, **core._inspect_options(config))
+        target_uri = core.load(
+            sample_points, **core._inspect_options(core.options)
+        )
         assert isinstance(target_uri, str)
+
+    @pytest.mark.usefixtures("core", "name")
+    def test_options(self, core, name):
+        """Test if default options are properly set"""
+        assert core.options.name == name

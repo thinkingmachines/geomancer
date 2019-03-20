@@ -7,7 +7,6 @@ from tests.backend.cores.base_test_dbcore import BaseTestDBCore
 
 # Import from package
 from geomancer.backend.cores.bq import BigQueryCore
-from geomancer.backend.settings import BQConfig
 
 
 @pytest.mark.bqtest
@@ -17,8 +16,8 @@ class TestBigQueryCore(BaseTestDBCore):
         return BigQueryCore("bigquery://tm-geospatial")
 
     @pytest.fixture
-    def config(self):
-        return BQConfig
+    def name(self):
+        return "bigquery"
 
     @pytest.fixture(
         params=[

@@ -12,22 +12,33 @@ import abc
 
 # Import modules
 from sqlalchemy.engine import create_engine
+from sqlalchemy.engine.url import make_url
 from sqlalchemy.schema import MetaData, Table
+
+from ..settings import BQConfig, SQLiteConfig
 
 
 class DBCore(abc.ABC):
     """Base class for all DBCore implementations"""
 
     @abc.abstractmethod
-    def __init__(self, dburl):
+    def __init__(self, dburl, options=None):
         """Initialize the database core
 
         Parameters
         ----------
         dburl : str
             Database url used to configure backend connection
+        options : geomancer.Config, optional
+            Specify configuration for interacting with the database backend.
+            Auto-detected if not set.
         """
-        self.dburl = dburl
+        self.dburl = make_url(dburl)
+        if not options:
+            options = {"bigquery": BQConfig(), "sqlite": SQLiteConfig()}[
+                self.dburl.get_backend_name()
+            ]
+        self.options = options
 
     @abc.abstractmethod
     def ST_GeoFromText(self, x):
@@ -59,7 +70,7 @@ class DBCore(abc.ABC):
         """
         raise NotImplementedError
 
-    def get_tables(self, source_uri, target_df, engine, options):
+    def get_tables(self, source_uri, target_df, engine):
         """Create tables given a sqlalchemy.engine.base.Engine
 
         Parameters
@@ -70,15 +81,15 @@ class DBCore(abc.ABC):
             Target table to add features to.
         engine : sqlalchemy.engine.base.Engine
             Engine with the databse dialect
-        options : geomancer.Config
-            Configuration for interacting with the database backend
 
         Returns
         -------
         (sqlalchemy.schema.Table, sqlalchemy.schema.Table)
             Source and Target table
         """
-        target_uri = self.load(df=target_df, **self._inspect_options(options))
+        target_uri = self.load(
+            df=target_df, **self._inspect_options(self.options)
+        )
         # Create SQLAlchemy primitives
         metadata = MetaData(bind=engine)
         source = Table(source_uri, metadata, autoload=True)

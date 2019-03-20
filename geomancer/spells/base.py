@@ -20,24 +20,20 @@ import abc
 
 # Import modules
 import pandas as pd
+from loguru import logger
+from sqlalchemy.engine.url import make_url
 from sqlalchemy.sql import select
 
-# Import from package
-from loguru import logger
-
 from ..backend.cores import BigQueryCore, SQLiteCore
-from ..backend.settings import BQConfig
 
-DB_CORE = {"bq": BigQueryCore, "sqlite": SQLiteCore}
+CORES = {"bigquery": BigQueryCore, "sqlite": SQLiteCore}
 
 
 class Spell(abc.ABC):
     """Base class for all feature/spell implementations"""
 
     @abc.abstractmethod
-    def __init__(
-        self, source_table, feature_name, options=BQConfig(), column="WKT"
-    ):
+    def __init__(self, source_table, feature_name, column="WKT", options=None):
         """Spell constructor
 
         Parameters
@@ -48,15 +44,31 @@ class Spell(abc.ABC):
             Column name for the output feature.
         column : str, optional
             Column to look the geometries from. The default is :code:`WKT`
-        options : geomancer.Config
+        options : geomancer.Config, optional
             Specify configuration for interacting with the database backend.
-            Default is a BigQuery Configuration
+            Auto-detected if not set.
         """
         self.source_table = source_table
         self.feature_name = feature_name
         self.options = options
         self.column = column
-        self.core = DB_CORE[self.options.name]
+
+    def get_core(self, dburl):
+        """Instantiates an appropriate core based on given database url
+
+        Parameters
+        ----------
+        dburl : str
+            Database url used to configure backend connection
+
+        Returns
+        -------
+        core : geomancer.DBCore
+            DBCore instance to access DB-specific methods
+        """
+        name = make_url(dburl).get_backend_name()
+        Core = CORES[name]
+        return Core(dburl, self.options)
 
     @abc.abstractmethod
     def query(self, source, target, core):
@@ -106,17 +118,14 @@ class Spell(abc.ABC):
         pandas.DataFrame
             Output dataframe with the features per given point
         """
-        core = self.core(dburl=dburl)
+        core = self.get_core(dburl)
 
         # Get engine
         engine = core.get_engine()
 
         # Get source and target tables
         source, target = core.get_tables(
-            source_uri=self.source_table,
-            target_df=df,
-            engine=engine,
-            options=self.options,
+            source_uri=self.source_table, target_df=df, engine=engine
         )
 
         # Build query
