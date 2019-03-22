@@ -56,9 +56,9 @@ def test_spell_features_only(sample_points):
     assert ["__index_level_0__", "dist_embassy"] == df.columns.tolist()
 
 
-@pytest.mark.usefixtures("sample_points")
-def test_spellbook_spells(sample_points):
-    book = SpellBook(
+@pytest.fixture
+def spellbook():
+    return SpellBook(
         [
             DistanceToNearest(
                 "supermarket",
@@ -74,6 +74,23 @@ def test_spellbook_spells(sample_points):
             ),
         ]
     )
-    df = book.cast(sample_points)
+
+
+@pytest.mark.usefixtures("spellbook", "sample_points")
+def test_spellbook_spells(spellbook, sample_points):
+    df = spellbook.cast(sample_points)
     assert "dist_supermarket" in df.columns
     assert "num_embassy" in df.columns
+
+
+@pytest.mark.usefixtures("spellbook", "spellbook_json")
+def test_spellbook_to_json(spellbook, spellbook_json):
+    assert spellbook.to_json() == spellbook_json
+
+
+@pytest.mark.usefixtures("spellbook", "spellbook_json")
+def test_spellbook_to_json_file(spellbook, spellbook_json, tmpdir):
+    filename = "spellbook.json"
+    f = tmpdir.mkdir(__name__).join(filename)
+    spellbook.to_json(f.strpath)
+    f.read() == spellbook_json

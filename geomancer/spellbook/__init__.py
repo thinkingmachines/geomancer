@@ -4,6 +4,9 @@
 merged in a single dataframe
 """
 
+# Import standard library
+import json
+
 # Import modules
 import pandas as pd
 
@@ -50,3 +53,28 @@ class SpellBook(object):
                 ).set_index("__index_level_0__")
             )
         return df
+
+    def to_json(self, filename=None, **kwargs):
+        """Exports spell book as a JSON string
+
+        Parameters
+        ----------
+        filename : str, optional
+            Output filename. If none is given, output is returned
+
+        Returns
+        -------
+        str or None
+            Export of spell book in JSON format
+        """
+        obj = {
+            **self.__dict__,
+            "spells": [
+                {**s.__dict__, "type": type(s).__name__} for s in self.spells
+            ],
+        }
+        if filename:
+            with open(filename, "w") as f:
+                json.dump(obj, f, **kwargs)
+        else:
+            return json.dumps(obj, **kwargs)
