@@ -26,9 +26,9 @@ class NumberOf(Spell):
             Column name for the output feature.
         column : str, optional
             Column to look the geometries from. The default is :code:`WKT`
-        options : geomancer.Config
+        options : geomancer.Config, optional
             Specify configuration for interacting with the database backend.
-            Default is a BigQuery Configuration
+            Auto-detected if not set.
         """
         super(NumberOf, self).__init__(**kwargs)
         self.source_column, self.source_filter = self.extract_columns(on)
