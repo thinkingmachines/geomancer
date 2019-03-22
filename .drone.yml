@@ -8,4 +8,4 @@ steps:
   - wget -O tests/data/source.sqlite https://storage.googleapis.com/tm-geomancer/test/source.sqlite
   - ci/install.sh
   - pip install -r requirements-dev.txt
-  - pytest -m "not bqtest" tests/
+  - pytest -m "not bqtest and not slow" tests/
