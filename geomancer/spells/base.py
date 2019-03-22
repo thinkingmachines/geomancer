@@ -37,8 +37,8 @@ class Spell(abc.ABC):
         self,
         source_table,
         feature_name,
-        column="WKT",
         source_id="osm_id",
+        dburl=None,
         options=None,
     ):
         """Spell constructor
@@ -49,17 +49,17 @@ class Spell(abc.ABC):
             Table URI to run queries against.
         feature_name : str
             Column name for the output feature.
-        column : str, optional
-            Column to look the geometries from. The default is :code:`WKT`
+        dburl : str, optional
+            Database url used to configure backend connection
         options : geomancer.Config, optional
             Specify configuration for interacting with the database backend.
             Auto-detected if not set.
         """
         self.source_table = source_table
         self.feature_name = feature_name
-        self.options = options
-        self.column = column
         self.source_id = source_id
+        self.dburl = dburl
+        self.options = options
 
     def extract_columns(self, x):
         """Spell constructor
@@ -120,8 +120,22 @@ class Spell(abc.ABC):
         """
         raise NotImplementedError
 
-    @logger.catch
-    def cast(self, df, dburl):
+    def _include_column(self, col, keep_index, features_only):
+        if features_only:
+            return col.key in ("__index_level_0__", self.feature_name)
+        if keep_index:
+            return True
+        return col.key != "__index_level_0__"
+
+    @logger.catch(reraise=True)
+    def cast(
+        self,
+        df,
+        dburl=None,
+        column="WKT",
+        keep_index=False,
+        features_only=False,
+    ):
         """Apply the feature transform to an input pandas.DataFrame
 
         If using BigQuery, a :code:`google.cloud.client.Client`
@@ -133,14 +147,28 @@ class Spell(abc.ABC):
             Dataframe containing the points to compare upon. By default, we
             will look into the :code:`geometry` column. You can specify your
             own column by passing an argument to the :code:`column` parameter.
-        dburl : str
+        dburl : str, optional
             Database url used to configure backend connection
+        column : str, optional
+            Column to look the geometries from. The default is :code:`WKT`
+        keep_index : boolean, optional
+            Include index in output dataframe
+        features_only : boolean, optional
+            Only return features as output dataframe. Automatically sets
+            :code:`keep_index` to :code:`True`.
 
         Returns
         -------
         pandas.DataFrame
             Output dataframe with the features per given point
         """
+        dburl = dburl or self.dburl
+        if not dburl:
+            raise ValueError("dburl was not supplied")
+
+        if features_only:
+            keep_index = True
+
         core = self.get_core(dburl)
 
         # Get engine
@@ -152,11 +180,15 @@ class Spell(abc.ABC):
         )
 
         # Build query
-        query = self.query(source, target, core)
+        query = self.query(source, target, core, column)
 
-        # Remove temporary index column
+        # Filter output columns
         query = select(
-            [col for col in query.columns if col.key != "__index_level_0__"]
+            [
+                col
+                for col in query.columns
+                if self._include_column(col, keep_index, features_only)
+            ]
         ).select_from(query)
 
         # Perform query

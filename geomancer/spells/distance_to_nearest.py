@@ -34,7 +34,7 @@ class DistanceToNearest(Spell):
         self.source_column, self.source_filter = self.extract_columns(on)
         self.within = within
 
-    def query(self, source, target, core):
+    def query(self, source, target, core, column):
         # Get all POIs of fclass `on`
         pois = select(
             [source.c[self.source_id], source.c.WKT],
@@ -42,7 +42,7 @@ class DistanceToNearest(Spell):
         ).cte("pois")
         # Compute the distance from `column` to each POI within given distance
         distance = func.ST_Distance(
-            core.ST_GeoFromText(target.c[self.column]),
+            core.ST_GeoFromText(target.c[column]),
             core.ST_GeoFromText(pois.c.WKT),
         )
         pairs = (

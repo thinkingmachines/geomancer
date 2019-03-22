@@ -38,7 +38,9 @@ class BaseTestSpell:
             engine=engine,
         )
         # Perform the test
-        query = spelldb.spell.query(source=source, target=target, core=core)
+        query = spelldb.spell.query(
+            source=source, target=target, core=core, column="WKT"
+        )
         assert isinstance(query, ClauseElement)
 
     @pytest.mark.usefixtures("spelldb", "sample_points")
