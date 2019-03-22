@@ -52,3 +52,11 @@ class BaseTestSpell:
         """Test if cast() returns a set of values. All our test cases should not be empty"""
         results = spelldb.spell.cast(df=sample_points, dburl=spelldb.dburl)
         assert results.values.size != 0
+
+    @pytest.mark.usefixtures("spelldb")
+    @pytest.mark.parametrize("on", ["fclass:embassy", "embassy"])
+    def test_extract_columns_return_values(self, on, spelldb):
+        """Test if extract_columns() returns a tuple (source_column, source_filter)"""
+        source_column, source_filter = spelldb.spell.extract_columns(on)
+        assert source_column == "fclass"
+        assert source_filter == "embassy"

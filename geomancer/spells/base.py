@@ -33,7 +33,14 @@ class Spell(abc.ABC):
     """Base class for all feature/spell implementations"""
 
     @abc.abstractmethod
-    def __init__(self, source_table, feature_name, column="WKT", options=None):
+    def __init__(
+        self,
+        source_table,
+        feature_name,
+        column="WKT",
+        source_id="osm_id",
+        options=None,
+    ):
         """Spell constructor
 
         Parameters
@@ -52,6 +59,22 @@ class Spell(abc.ABC):
         self.feature_name = feature_name
         self.options = options
         self.column = column
+        self.source_id = source_id
+
+    def extract_columns(self, x):
+        """Spell constructor
+
+        Parameters
+        ----------
+        x: str
+            source_column:source_filter pair to determine filter source
+
+        Returns
+        -------
+        (str, str)
+            source_column and source_filter pair
+        """
+        return x.split(":") if len(x.split(":")) == 2 else ("fclass", x)
 
     def get_core(self, dburl):
         """Instantiates an appropriate core based on given database url
