@@ -45,7 +45,7 @@ class BQConfig(Config):
 
     @property
     def name(self):
-        return "bq"
+        return "bigquery"
 
     DATASET_ID = "geomancer"
     EXPIRY = 3
