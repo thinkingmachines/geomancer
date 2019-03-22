@@ -29,7 +29,7 @@ class DBCore(abc.ABC):
         ----------
         dburl : str
             Database url used to configure backend connection
-        options : geomancer.Config, optional
+        options : :class:`geomancer.backend.settings.Config`, optional
             Specify configuration for interacting with the database backend.
             Auto-detected if not set.
         """
@@ -42,25 +42,21 @@ class DBCore(abc.ABC):
 
     @abc.abstractmethod
     def ST_GeoFromText(self, x):
-        """Custom-implementation of the GeoFromTextm method
+        """Custom-implementation of converting a string into a geographical type
 
-        This is an abstract method, and must be implemented in each subclass.
-
-        As it turns out, ST_GeogFromText only exists in BigQuery and PostGIS.
-        Only ST_GeomFromText is available for Spatialite. Thus, we need to
-        construct our own GeoFromText method for type-casting
+        As it turns out, :code:`ST_GeogFromText` only exists in BigQuery and PostGIS.
+        Only :code:`ST_GeomFromText` is available for Spatialite. Thus, we need to
+        construct our own method for type-casting
         """
         raise NotImplementedError
 
     @abc.abstractmethod
     def load(self, df):
-        """Load a pandas.Dataframe into the Database
-
-        This is an abstract method, and must be implemented in each subclass.
+        """Load a pandas.Dataframe into the database
 
         Parameters
         ----------
-        df : pandas.DataFrame
+        df : :class:`pandas.DataFrame`
             Input dataframe
 
         Raises
@@ -71,20 +67,20 @@ class DBCore(abc.ABC):
         raise NotImplementedError
 
     def get_tables(self, source_uri, target_df, engine):
-        """Create tables given a sqlalchemy.engine.base.Engine
+        """Create tables given a :class:`sqlalchemy.engine.base.Engine`
 
         Parameters
         -----------
         source_uri : str
             Source table URI to run queries against.
-        target_df : pandas.DataFrame
+        target_df : :class:`pandas.DataFrame`
             Target table to add features to.
-        engine : sqlalchemy.engine.base.Engine
-            Engine with the databse dialect
+        engine : :class:`sqlalchemy.engine.base.Engine`
+            Engine with the database dialect
 
         Returns
         -------
-        (sqlalchemy.schema.Table, sqlalchemy.schema.Table)
+        (:class:`sqlalchemy.schema.Table`, :class:`sqlalchemy.schema.Table`)
             Source and Target table
         """
         target_uri = self.load(
@@ -97,11 +93,22 @@ class DBCore(abc.ABC):
         return source, target
 
     def get_engine(self):
-        """Get the engine from the DBCore"""
+        """Get the engine from the DBCore
+
+        Returns
+        -------
+        :class:`sqlalchemy.engine.base.Engine`
+            Engine with the database dialect
+        """
         return create_engine(self.dburl)
 
     def _inspect_options(self, options):
-        """Helper method to return the attribues of a Config"""
+        """Helper method to return the attributes of a configuration
+
+        Returns
+        -------
+        dict
+        """
         return dict(
             (name.lower(), getattr(options, name))
             for name in dir(options)

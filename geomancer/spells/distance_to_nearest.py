@@ -1,5 +1,28 @@
 # -*- coding: utf-8 -*-
 
+"""
+Spell DistanceToNearest obtains the distance to the nearest Point-of-Interest
+or geographic feature. Suppose you want to find the distance to
+the nearest embassy:
+
+.. code-block:: python
+
+    from geomancer.spells import DistanceToNearest
+    from tests.conftest import sample_points
+
+    # Load sample points
+    df = sample_points()
+
+    # Configure and cast the spell
+    spell = DistanceToNearest("embassy",
+                               source_table="geospatial.ph_osm.gis_osm_pois_free_1",
+                               feature_name="dist_embassy")
+
+    # Will create a new column, `dist_embassy` with the
+    # appropriate features
+    df_with_features = spell.cast(df, dburl="bigquery://geospatial")
+"""
+
 # Import modules
 from sqlalchemy import func
 from sqlalchemy.sql import select
@@ -26,7 +49,7 @@ class DistanceToNearest(Spell):
             Column name for the output feature.
         column : str, optional
             Column to look the geometries from. The default is :code:`WKT`
-        options : geomancer.Config, optional
+        options : :class:`geomancer.backend.settings.Config`, optional
             Specify configuration for interacting with the database backend.
             Auto-detected if not set.
         """

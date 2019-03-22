@@ -6,10 +6,12 @@ In Geomancer, all feature transform primitives are of the class :code:`Spell`.
 When defining your own feature primitive, simply create a class that inherits
 from :code:`Spell`:
 
-    >>> from geomancer.spells.base import Spell
-    >>> class MyNewFeature(Spell):
-    >>>     def __init__(self):
-    >>>         super(MyNewFeature, self).__init__()
+    .. code-block:: python
+
+        from geomancer.spells.base import Spell
+        class MyNewFeature(Spell):
+             def __init__(self):
+                 super(MyNewFeature, self).__init__()
 
 All methods must be implemented in order to not raise a
 :code:`NotImplementedError`.
@@ -51,7 +53,7 @@ class Spell(abc.ABC):
             Column name for the output feature.
         dburl : str, optional
             Database url used to configure backend connection
-        options : geomancer.Config, optional
+        options : :class:`geomancer.backend.settings.Config`, optional
             Specify configuration for interacting with the database backend.
             Auto-detected if not set.
         """
@@ -62,17 +64,17 @@ class Spell(abc.ABC):
         self.options = options
 
     def extract_columns(self, x):
-        """Spell constructor
+        """Extract column and filter from a string input
 
         Parameters
         ----------
         x: str
-            source_column:source_filter pair to determine filter source
+            The column and filter pair in the form :code:`column:filter`
 
         Returns
         -------
         (str, str)
-            source_column and source_filter pair
+            The extracted column and filter pair
         """
         return x.split(":") if len(x.split(":")) == 2 else ("fclass", x)
 
@@ -86,7 +88,7 @@ class Spell(abc.ABC):
 
         Returns
         -------
-        core : geomancer.DBCore
+        core : :code:`geomancer.backend.cores.DBCore`
             DBCore instance to access DB-specific methods
         """
         name = make_url(dburl).get_backend_name()
@@ -94,23 +96,23 @@ class Spell(abc.ABC):
         return Core(dburl, self.options)
 
     @abc.abstractmethod
-    def query(self, source, target, core):
+    def query(self, source, target, core, column):
         """Build the query used to extract features
-
-        This is an abstract method, and must be implemented in each subclass.
 
         Parameters
         ----------
-        source : sqlalchemy.schema.Table
+        source : :class:`sqlalchemy.schema.Table`
             Source table to extract features from.
-        target : sqlalchemy.schema.Table
+        target : :class:`sqlalchemy.schema.Table`
             Target table to add features to.
-        core : geomancer.DBCore
+        core : :class:`geomancer.backend.cores.base.DBCore`
             DBCore instance to access DB-specific methods
+        column : string
+            Column to look the geometries from. The default is :code:`WKT`
 
         Returns
         -------
-        sqlalchemy.sql.expression.ClauseElement
+        :class:`sqlalchemy.sql.expression.ClauseElement`
             The statement to query features with.
 
         Raises
@@ -136,16 +138,13 @@ class Spell(abc.ABC):
         keep_index=False,
         features_only=False,
     ):
-        """Apply the feature transform to an input pandas.DataFrame
-
-        If using BigQuery, a :code:`google.cloud.client.Client`
-        must be passed in the :code:`client` parameter.
+        """Apply the feature transform to an input :class:`pandas.DataFrame`
 
         Parameters
         ----------
-        df : pandas.DataFrame
+        df : :class:`pandas.DataFrame`
             Dataframe containing the points to compare upon. By default, we
-            will look into the :code:`geometry` column. You can specify your
+            will look into the :code:`WKT` column. You can specify your
             own column by passing an argument to the :code:`column` parameter.
         dburl : str, optional
             Database url used to configure backend connection
@@ -159,7 +158,7 @@ class Spell(abc.ABC):
 
         Returns
         -------
-        pandas.DataFrame
+        :class:`pandas.DataFrame`
             Output dataframe with the features per given point
         """
         dburl = dburl or self.dburl

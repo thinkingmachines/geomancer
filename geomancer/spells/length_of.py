@@ -1,5 +1,35 @@
 # -*- coding: utf-8 -*-
 
+"""
+Spell LengthOf obtains the length of all Lines-of-Interest with a certain
+radius. Suppose you want to find the length of residential roads
+given a set of points:
+
+.. code-block:: python
+
+    from geomancer.spells import LengthOf
+    from tests.conftest import sample_points
+
+    # Load sample points
+    df = sample_points()
+
+    # Configure and cast the spell
+    spell = LengthOf("residential",
+                      source_table="geospatial.ph_osm.gis_osm_roads_free_1",
+                      feature_name="len_residential")
+
+    # Will create a new column, `len_residential` with the
+    # appropriate features
+    df_with_features = spell.cast(df, dburl="bigquery://geospatial")
+
+
+.. warning::
+
+    This spell currently doesn't work in BigQuery. In addition, the runtime for
+    casting this spell is slow.
+
+"""
+
 # Import modules
 from sqlalchemy import func
 from sqlalchemy.sql import select
@@ -29,7 +59,7 @@ class LengthOf(Spell):
             Column name for the output feature.
         column : str, optional
             Column to look the geometries from. The default is :code:`WKT`
-        options : geomancer.Config
+        options : :class:`geomancer.backend.settings.Config`
             Specify configuration for interacting with the database backend.
             Default is a BigQuery Configuration
         """

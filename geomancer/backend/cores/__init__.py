@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 
-"""Various engines for interacting with the backend database"""
+"""
+The Core module contains various engines that can interact with different
+databases. We strive for Geomaner to be database-agnostic: a query should
+ideally be executable across **all** types of data warehouse.
+"""
 
 from .bq import BigQueryCore
 from .sqlite import SQLiteCore

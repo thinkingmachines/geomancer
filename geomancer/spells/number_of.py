@@ -1,5 +1,29 @@
 # -*- coding: utf-8 -*-
 
+"""
+Spell NumberOf obtains the number of Points-of-Interests or geographic features
+within a particular range. Suppose you want to find the number of supermarkets
+given a set of points
+
+.. code-block:: python
+
+    from geomancer.spells import NumberOf
+    from tests.conftest import sample_points
+
+    # Load sample points
+    df = sample_points()
+
+    # Configure and cast the spell
+    spell = NumberOf("supermarket",
+                      source_table="geospatial.ph_osm.gis_osm_pois_free_1",
+                      feature_name="num_supermarket")
+
+    # Will create a new column, `num_supermarket` with the
+    # appropriate features
+    df_with_features = spell.cast(df, dburl="bigquery://geospatial")
+
+"""
+
 # Import modules
 from sqlalchemy import func, distinct
 from sqlalchemy.sql import select
@@ -8,7 +32,7 @@ from .base import Spell
 
 
 class NumberOf(Spell):
-    """Obtain the distance to the nearest Point-of-Interest or geographic feature"""
+    """Obtain the number of nearest Point-of-Interests or geographic features"""
 
     def __init__(self, on, within=10 * 1000, **kwargs):
         """Spell constructor
@@ -26,7 +50,7 @@ class NumberOf(Spell):
             Column name for the output feature.
         column : str, optional
             Column to look the geometries from. The default is :code:`WKT`
-        options : geomancer.Config, optional
+        options : :class:`geomancer.backend.settings.Config`, optional
             Specify configuration for interacting with the database backend.
             Auto-detected if not set.
         """

@@ -1,37 +1,5 @@
 # -*- coding: utf-8 -*-
 
-"""A :code:`SpellBook` is a collection of spells that can be sequentially casted and
-merged in a single dataframe
-
-    .. code-block:: python
-
-        from geomancer.spells import DistanceOf, NumberOf
-        from geomancer.spellbook import SpellBook
-        spellbook = SpellBook(
-                spells=[
-                    DistanceOf(...),
-                    NumberOf(...),
-                ],
-            )
-        df = ...
-        df_with_features = spellbook.cast(df)
-
-:code:`SpellBook`s can be distributed by exporting them to JSON files.
-
-    .. code-block:: python
-
-        spellbook.author = "My Name"
-        spellbook.description = "My Features"
-        spellbook.to_json("my_features.json")
-
-Now other people can easily reuse your feature extractions in with their own datasets!
-
-    .. code-block:: python
-
-        spellbook = SpellBook.read_json("my_features.json")
-        my_df = ...
-        my_df_with_features = spellbook.cast(my_df)
-"""
 
 # Import standard library
 import importlib

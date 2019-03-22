@@ -20,7 +20,7 @@ class BigQueryCore(DBCore):
 
     Attributes
     ----------
-    client : google.cloud.client.Client
+    client : :class:`google.cloud.client.Client`
         BigQuery client for handling BQ interactions
     """
 
@@ -40,7 +40,7 @@ class BigQueryCore(DBCore):
 
         Parameters
         ----------
-        df : pandas.DataFrame
+        df : :class:`pandas.DataFrame`
             Input dataframe to upload to BigQuery
         dataset_id : str
             ID to name the created Dataset
@@ -95,7 +95,7 @@ class BigQueryCore(DBCore):
 
         Parameters
         ----------
-        table_ref : google.cloud.bigquery.table.TableReference
+        table_ref : :class:`google.cloud.bigquery.table.TableReference`
             Reference to a BigQuery table
         expiry : int
             Expiration in hours
@@ -118,7 +118,7 @@ class BigQueryCore(DBCore):
 
         Returns
         -------
-        google.cloud.bigquery.dataset.Dataset
+        :class:`google.cloud.bigquery.dataset.Dataset`
             The Dataset class to build tables from
         """
         dataset_ref = self.client.dataset(dataset_id)

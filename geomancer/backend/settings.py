@@ -1,16 +1,18 @@
 # -*- coding: utf-8 -*-
 
-"""Contains default configurations for interacting with external clients
+"""Contains default configurations for interacting with the database engines
 
 If you wish to override the default configurations, simply instantiate the class
 and set the value you desire. For example, you wish to lengthen the expiry
-date of a BigQuery table from 3 (the default) to 12:
+date of a BigQuery table from :code:`3` hours (the default) to :code:`12` hours:
 
-    >>> from geomancer import BQConfig
-    >>> myconfig = BQConfig()
-    >>> assert myconfig.EXPIRY == 3 # Default value
-    >>> myconfig.EXPIRY = 12 # Update config
-    >>> assert myconfig.EXPIRY == 12
+    .. code-block:: python
+
+        from geomancer import BQConfig
+        myconfig = BQConfig()
+        assert myconfig.EXPIRY == 3 # Default value
+        myconfig.EXPIRY = 12 # Update config
+        assert myconfig.EXPIRY == 12
 
 """
 
@@ -19,7 +21,7 @@ import abc
 
 
 class Config(abc.ABC):
-    """General configuration"""
+    """Base abstract configuration"""
 
     @abc.abstractproperty
     def name(self):
@@ -65,10 +67,9 @@ class SQLiteConfig(Config):
         Default is :code:`None`
     IF_EXISTS : str
         How to behave if the table already exists. Default is
-        :code:`replace`
-        - fail: raise a ValueError
-        - replace: drop the table before inserting new values
-        - append: insert new values to the existing table
+        :code:`replace` (drop the table before inserting new values).
+        Other options are :code:`fail` (raise a ValueError) and
+        :code:`append` (insert new values to the existing table)
     """
 
     @property
