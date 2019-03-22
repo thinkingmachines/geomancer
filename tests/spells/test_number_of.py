@@ -17,13 +17,16 @@ params = [
         ),
         dburl="sqlite:///tests/data/source.sqlite",
     ),
-    SpellDB(
-        spell=NumberOf(
-            on="primary",
-            source_table="gis_osm_roads_free_1",
-            feature_name="num_primary",
+    pytest.param(
+        SpellDB(
+            spell=NumberOf(
+                on="primary",
+                source_table="gis_osm_roads_free_1",
+                feature_name="num_primary",
+            ),
+            dburl="sqlite:///tests/data/source.sqlite",
         ),
-        dburl="sqlite:///tests/data/source.sqlite",
+        marks=pytest.mark.slow,
     ),
     pytest.param(
         SpellDB(
