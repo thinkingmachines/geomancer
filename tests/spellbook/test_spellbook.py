@@ -94,3 +94,16 @@ def test_spellbook_to_json_file(spellbook, spellbook_json, tmpdir):
     f = tmpdir.mkdir(__name__).join(filename)
     spellbook.to_json(f.strpath)
     f.read() == spellbook_json
+
+
+@pytest.mark.usefixtures("spellbook", "spellbook_json")
+def test_spellbook_read_json(spellbook, spellbook_json, tmpdir):
+    filename = "spellbook.json"
+    f = tmpdir.mkdir(__name__).join(filename)
+    f.write(spellbook_json)
+    _spellbook = SpellBook.read_json(f.strpath)
+    assert _spellbook.column == spellbook.column
+    assert _spellbook.author == spellbook.author
+    assert _spellbook.description == spellbook.description
+    for i, spell in enumerate(_spellbook.spells):
+        assert spell.__dict__ == spellbook.spells[i].__dict__

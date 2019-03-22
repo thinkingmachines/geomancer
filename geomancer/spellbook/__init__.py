@@ -2,9 +2,33 @@
 
 """A :code:`SpellBook` is a collection of spells that can be sequentially casted and
 merged in a single dataframe
+
+    >>> from geomancer.spells import DistanceOf, NumberOf
+    >>> from geomancer.spellbook import SpellBook
+    >>> spellbook = SpellBook(
+            spells=[
+                DistanceOf(...),
+                NumberOf(...),
+            ],
+        )
+    >>> df = ...
+    >>> df_with_features = spellbook.cast(df)
+
+:code:`SpellBook`s can be distributed by exporting them to JSON files.
+
+    >>> spellbook.author = "My Name"
+    >>> spellbook.description = "My Features"
+    >>> spellbook.to_json("my_features.json")
+
+Now other people can easily reuse your feature extractions in with their own datasets!
+
+    >>> spellbook = SpellBook.read_json("my_features.json")
+    >>> my_df = ...
+    >>> my_df_with_features = spellbook.cast(my_df)
 """
 
 # Import standard library
+import importlib
 import json
 
 # Import modules
@@ -70,7 +94,12 @@ class SpellBook(object):
         obj = {
             **self.__dict__,
             "spells": [
-                {**s.__dict__, "type": type(s).__name__} for s in self.spells
+                {
+                    **s.__dict__,
+                    "module": type(s).__module__,
+                    "type": type(s).__name__,
+                }
+                for s in self.spells
             ],
         }
         if filename:
@@ -78,3 +107,32 @@ class SpellBook(object):
                 json.dump(obj, f, **kwargs)
         else:
             return json.dumps(obj, **kwargs)
+
+    @classmethod
+    def _instantiate_spells(cls, spells):
+        for spell in spells:
+            mod = importlib.import_module(spell.pop("module"))
+            spell_cls = getattr(mod, spell.pop("type"))
+            on = "{}:{}".format(
+                spell.pop("source_column"), spell.pop("source_filter")
+            )
+            yield spell_cls(on, **spell)
+
+    @classmethod
+    def read_json(cls, filename):
+        """Reads a JSON exported spell book
+
+        Parameters
+        ----------
+        filename : str
+            Filename of JSON file to read.
+
+        Returns
+        -------
+        :class:`geomancer.spellbook.SpellBook`
+            :code:`SpellBook` instance parsed from given JSON file.
+        """
+        with open(filename) as f:
+            obj = json.load(f)
+            obj["spells"] = cls._instantiate_spells(obj.pop("spells"))
+            return cls(**obj)
