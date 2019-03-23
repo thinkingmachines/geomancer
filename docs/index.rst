@@ -22,6 +22,15 @@ Welcome to Geomancer's documentation!
         :target: https://opensource.org/licenses/MIT
         :alt: License: MIT
 
+
+Geomancer is a feature engineering library for geospatial data. It leverages
+OpenStreetMap (OSM) alongside a data warehouse like BigQuery. You can use this
+to create, share, and iterate geospatial features for your downstream tasks
+(analysis, modelling, visualization, etc.).
+
+- **Free Software**: MIT License
+- **Github Repository**: https://github.com/thinkingmachines/geomancer
+
 .. toctree::
    :maxdepth: 1
    :caption: General
