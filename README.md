@@ -7,9 +7,9 @@
 
 Geomancer is a feature engineering library for geospatial data. It leverages
 [OpenStreetMap (OSM)](https://www.openstreetmap.org/) alongside a data
-warehouse like BigQuery. This project is currently in pre-alpha and is under
-active development.
-
+warehouse like BigQuery. You can use this to create, share, and iterate
+geospatial features for your downstream tasks (analysis, modelling,
+visualization, etc.). 
 
 ## Features
 
@@ -18,8 +18,7 @@ Geomancer can perform geospatial feature engineering for all types of vector dat
 
 - Feature primitives for geospatial feature engineering
 - Ability to switch out data warehouses (BigQuery, SQLite, PostgreSQL (*In Progress*))
-- Compile and share your features (*In Progress*)
-
+- Compile and share your features using our SpellBook 
 
 ## Installation
 
