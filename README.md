@@ -5,9 +5,9 @@
 [![Documentation Status](https://readthedocs.org/projects/geomancer/badge/?version=latest)](https://geomancer.readthedocs.io/en/latest/?badge=latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-Geomancer is a feature engineering library for geospatial data. It leverages
-[OpenStreetMap (OSM)](https://www.openstreetmap.org/) alongside a data
-warehouse like BigQuery. You can use this to create, share, and iterate
+Geomancer is a geospatial feature engineering library. It leverages geospatial
+data such as [OpenStreetMap (OSM)](https://www.openstreetmap.org/) alongside a
+data warehouse like BigQuery. You can use this to create, share, and iterate
 geospatial features for your downstream tasks (analysis, modelling,
 visualization, etc.). 
 
@@ -20,7 +20,9 @@ Geomancer can perform geospatial feature engineering for all types of vector dat
 - Ability to switch out data warehouses (BigQuery, SQLite, PostgreSQL (*In Progress*))
 - Compile and share your features using our SpellBook 
 
-## Installation
+## Setup and Installation
+
+### Installing the library
 
 Geomancer can be installed using `pip`.
 
@@ -45,6 +47,18 @@ $ git clone https://github.com/thinkingmachines/geomancer.git
 $ cd geomancer
 $ python setup.py install
 ```
+
+### Setting up your data warehouse
+
+Geomancer is powered by a geospatial data warehouse: we highly-recommend using
+[BigQuery](https://cloud.google.com/bigquery/) as your data warehouse and
+[Geofabrik's OSM catalog](https://www.geofabrik.de/data/download.html) as your
+source of Points and Lines of interest. 
+
+[![Geomancer architecture](https://storage.googleapis.com/tm-geomancer/assets/architecture.png
+)](https://github.com/thinkingmachines/geomancer)
+
+You can see the set-up instructions in [this link](https://geomancer.readthedocs.io/en/latest/setup.html#setting-up-your-data-warehouse)
 
 ## Basic Usage
 
