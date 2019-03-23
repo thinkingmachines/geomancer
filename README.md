@@ -1,4 +1,5 @@
-# geomancer
+![Geomancer Logo](https://storage.googleapis.com/tm-geomancer/assets/header.png)
+---
 
 [![PyPI version](https://badge.fury.io/py/geomancer.svg)](https://badge.fury.io/py/geomancer)
 [![Build Status](https://cloud.drone.io/api/badges/thinkingmachines/geomancer/status.svg)](https://cloud.drone.io/thinkingmachines/geomancer)
