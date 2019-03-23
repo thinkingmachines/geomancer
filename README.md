@@ -1,8 +1,9 @@
 # geomancer
 
-[![Build Status](https://cloud.drone.io/api/badges/thinkingmachines/geomancer/status.svg)](https://cloud.drone.io/thinkingmachines/geomancer)
 [![PyPI version](https://badge.fury.io/py/geomancer.svg)](https://badge.fury.io/py/geomancer)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Build Status](https://cloud.drone.io/api/badges/thinkingmachines/geomancer/status.svg)](https://cloud.drone.io/thinkingmachines/geomancer)
+[![Documentation Status](https://readthedocs.org/projects/geomancer/badge/?version=latest)](https://geomancer.readthedocs.io/en/latest/?badge=latest)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 Geomancer is a feature engineering library for geospatial data. It leverages
 [OpenStreetMap (OSM)](https://www.openstreetmap.org/) alongside a data
@@ -12,7 +13,7 @@ active development.
 
 ## Features
 
-Geomancer can perform OSM feature engineering for all types of vector data
+Geomancer can perform geospatial feature engineering for all types of vector data
 (i.e. points, lines, polygons).
 
 - Feature primitives for geospatial feature engineering
@@ -34,8 +35,8 @@ identifier:
 
 ```
 $ pip install geomancer[bq] # For BigQuery
-$ pip install geomancer[sqlite] # For Spatialite
-$ pip install geomancer[psql] # For PostGresSQL
+$ pip install geomancer[sqlite] # For SQLite
+$ pip install geomancer[psql] # For PostgreSQL
 ```
 
 Alternatively, you can also clone the repository then run `install`.
@@ -116,11 +117,10 @@ Simply fork this repository and make a Pull Request! We'd definitely appreciate:
 - Testing
 
 Also, we have a
-[CONTRIBUTING.md](https://github.com/thinkingmachines/geomancer/blob/master/CONTRIBUTING.md)
-and a [Code of
-Conduct](https://github.com/thinkingmachines/geomancer/blob/master/CODE_OF_CONDUCT.md),
+[CONTRIBUTING](https://github.com/thinkingmachines/geomancer/blob/master/CONTRIBUTING.rst)
+and a [CODE_OF_CONDUCT](https://github.com/thinkingmachines/geomancer/blob/master/CODE_OF_CONDUCT.rst),
 so please check that one out!
 
 ## License
 
-MIT License (c) 2019, Thinking Machines Data Science
+MIT License © 2019, Thinking Machines Data Science

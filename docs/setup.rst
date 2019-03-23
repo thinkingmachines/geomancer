@@ -17,8 +17,8 @@ identifier.
 .. code-block:: shell
 
    $ pip install geomancer[bq] # For BigQuery
-   $ pip install geomancer[sqlite] # For Spatialite
-   $ pip install geomancer[psql] # For PostGresSQL
+   $ pip install geomancer[sqlite] # For SQLite
+   $ pip install geomancer[psql] # For PostgreSQL (*In Progress*)
 
 Alternatively, you can also clone the repository then run `install`.
 
