@@ -13,10 +13,10 @@ active development.
 ## Features
 
 Geomancer can perform OSM feature engineering for all types of vector data
-(i.e. points, lines, polygons). 
+(i.e. points, lines, polygons).
 
 - Feature primitives for geospatial feature engineering
-- Ability to switch out data warehouses (BigQuery, SQLite, PostgreSQL (*In Progress*))  
+- Ability to switch out data warehouses (BigQuery, SQLite, PostgreSQL (*In Progress*))
 - Compile and share your features (*In Progress*)
 
 
@@ -44,7 +44,7 @@ Alternatively, you can also clone the repository then run `install`.
 $ git clone https://github.com/thinkingmachines/geomancer.git
 $ cd geomancer
 $ python setup.py install
-``` 
+```
 
 ## Basic Usage
 
@@ -54,14 +54,51 @@ point.
 
 ```python
 from geomancer.spells import DistanceToNearest
-from google.cloud import bigquery # Using BigQuery backend
 
-# Load the dataset in a pandas dataframe 
+# Load the dataset in a pandas dataframe
 # df = load_dataset()
 
-dist_supermarket = DistanceToNearest('supermarket',
-                                     source_table='ph_osm.gis_osm_pois_free_1',
-                                     feature_name='dist_supermarket').cast(df, host=bigquery.Client())
+dist_spell = DistanceToNearest(
+    "supermarket",
+    source_table="ph_osm.gis_osm_pois_free_1",
+    feature_name="dist_supermarket",
+).cast(df, dburl="bigquery://project-name")
+```
+
+Compose multiple spells into a "spell book" which you can export as a JSON file.
+
+```python
+from geomancer.spells import DistanceToNearest
+from geomancer.spellbook import SpellBook
+
+spellbook = SpellBook([
+    DistanceToNearest(
+        "supermarket",
+        source_table="ph_osm.gis_osm_pois_free_1",
+        feature_name="dist_supermarket",
+        dburl="bigquery://project-name",
+    ),
+    DistanceToNearest(
+        "embassy",
+        source_table="ph_osm.gis_osm_pois_free_1",
+        feature_name="dist_embassy",
+        dburl="bigquery://project-name",
+    ),
+])
+spellbook.to_json("dist_supermarket_and_embassy.json")
+```
+
+You can share the generated file so other people can re-use your feature extractions
+with their own datasets.
+
+```python
+from geomancer.spellbook import SpellBook
+
+# Load the dataset in a pandas dataframe
+# df = load_dataset()
+
+spellbook = SpellBook.read_json("dist_supermarket_and_embassy.json")
+dist_supermarket_and_embassy = spellbook.cast(df)
 ```
 
 ## Contributing
