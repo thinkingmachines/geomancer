@@ -116,9 +116,11 @@ I can bind them together and share with other researchers to try on their own da
    spellbook = SpellBook(
              spells=[
                  DistanceToNearest("primary",
-                                    source_table="geospatial.ph_osm.gis_osm_roads_free_1",
+                                    dburl="bigquery://geospatial",
+                                    source_table="ph_osm.gis_osm_roads_free_1",
                                     feature_name="dist_primary"),
                  NumberOf("supermarket"
+                           dburl="bigquery://geospatial",
                            source_table="geospatial.ph_osm.gis_osm_pois_free_1",
                            feature_name="num_supermarkets"),
              ])
