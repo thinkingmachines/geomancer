@@ -10,4 +10,6 @@ tox
 Sphinx==1.7.6
 sphinx_rtd_theme
 sphinxcontrib-napoleon
+# Deployment
+twine
 
