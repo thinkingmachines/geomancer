@@ -9,3 +9,16 @@ steps:
   - ci/install.sh
   - pip install -r requirements-dev.txt
   - pytest -m "not bqtest and not slow" tests/
+- name: publish
+  image: plugins/pypi
+  settings:
+    username: thinkdatasci
+    password:
+          from_secret: pypi_access
+  when:
+    branch:
+        - master
+    ref:
+        - refs/tags/v*
+
+
