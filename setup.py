@@ -7,7 +7,7 @@ with open("README.md", encoding="utf8") as readme_file:
     readme = readme_file.read()
 
 # Packages for installation
-common = ["numpy", "pandas", "loguru", "sqlalchemy", "geoalchemy2"]
+common = ["numpy", "pandas", "loguru", "sqlalchemy", "geoalchemy2", "pytz"]
 test_requirements = ["pytest==3.6.4", "pytest-cov", "flake8==3.5.0", "tox"]
 
 # Warehouse-specific installations
@@ -39,15 +39,25 @@ setup(
     ],
     license="MIT license",
     zip_safe=False,
-    keywords=["osm", "python client", "geospatial"],
+    keywords=[
+        "osm",
+        "python client",
+        "geospatial",
+        "bigquery",
+        "machine learning",
+        "feature engineering",
+    ],
     classifiers=[
-        "Development Status :: 2 - Pre-Alpha",
+        "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "Intended Audience :: Education",
         "Intended Audience :: Science/Research",
         "License :: OSI Approved :: MIT License",
         "Natural Language :: English",
         "Topic :: Scientific/Engineering",
+        "Topic :: Scientific/Engineering :: GIS",
+        "Topic :: Scientific/Engineering :: Artificial Intelligence",
+        "Topic :: Software Development :: Libraries :: Python Modules",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.5",
     ],
