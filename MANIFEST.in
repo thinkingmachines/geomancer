@@ -1,0 +1,12 @@
+include CONTRIBUTING.rst
+include CHANGELOG.rst
+include CODE_OF_CONDUCT.rst
+include LICENSE
+include README.md
+include requirements-dev.txt
+
+recursive-include tests *
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
+
+recursive-include docs *.rst conf.py Makefile make.bat *.jpg *.png *.gif
