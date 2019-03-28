@@ -9,7 +9,27 @@ steps:
   - ci/install.sh
   - pip install -r requirements-dev.txt
   - pytest -m "not bqtest and not slow" tests/
-- name: publish
+
+---
+kind: pipeline
+name: python3.7
+
+steps:
+- name: test
+  image: python:3.7-stretch
+  commands:
+  - wget -O tests/data/source.sqlite https://storage.googleapis.com/tm-geomancer/test/source.sqlite
+  - ci/install.sh
+  - pip install -r requirements-dev.txt
+  - pytest -m "not bqtest and not slow" tests/
+
+
+---
+kind: pipeline
+name: publish
+
+steps:
+- name: publish_pypi
   image: plugins/pypi
   settings:
     username: thinkdatasci
@@ -20,3 +40,7 @@ steps:
         - master
     event:
         - tag
+
+depends_on:
+    - python3.6
+    - python3.7
