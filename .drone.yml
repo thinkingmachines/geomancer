@@ -18,7 +18,5 @@ steps:
   when:
     branch:
         - master
-    ref:
-        - refs/tags/v*
-
-
+    event:
+        - tag
