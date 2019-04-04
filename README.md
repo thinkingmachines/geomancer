@@ -1,10 +1,10 @@
 ![Geomancer Logo](https://storage.googleapis.com/tm-geomancer/assets/header.png)
 ---
 
-[![PyPI version](https://badge.fury.io/py/geomancer.svg)](https://badge.fury.io/py/geomancer)
-[![Build Status](https://cloud.drone.io/api/badges/thinkingmachines/geomancer/status.svg)](https://cloud.drone.io/thinkingmachines/geomancer)
-[![Documentation Status](https://readthedocs.org/projects/geomancer/badge/?version=latest)](https://geomancer.readthedocs.io/en/latest/?badge=latest)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![PyPI](https://img.shields.io/pypi/v/geomancer.svg?color=brightgreen&style=flat-square)](https://pypi.org/project/geomancer/)
+[![Build Status](https://img.shields.io/badge/dynamic/json.svg?color=brightgreen&label=build&query=status&url=https%3A%2F%2Fcloud.drone.io%2Fapi%2Frepos%2Fthinkingmachines%2Fgeomancer%2Fbuilds%2Flatest%3Fref%3Drefs%2Fheads%2Fmaster&style=flat-square)](https://cloud.drone.io/thinkingmachines/geomancer)
+[![Read the Docs](https://img.shields.io/readthedocs/geomancer.svg?style=flat-square)](https://geomancer.readthedocs.io/en/latest/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
 Geomancer is a geospatial feature engineering library. It leverages geospatial
 data such as [OpenStreetMap (OSM)](https://www.openstreetmap.org/) alongside a
