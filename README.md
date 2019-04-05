@@ -70,14 +70,35 @@ point.
 ```python
 from geomancer.spells import DistanceToNearest
 
-# Load the dataset in a pandas dataframe
+# Load your dataset in a pandas dataframe
 # df = load_dataset()
 
 dist_spell = DistanceToNearest(
     "supermarket",
     source_table="ph_osm.gis_osm_pois_free_1",
     feature_name="dist_supermarket",
-).cast(df, dburl="bigquery://project-name")
+    dburl="bigquery://project-name",
+).cast(df)
+```
+
+You can specify the type of filter  using the format `{column}:{filter}`.  By
+default, the `column` value is `fclass`. For example, if you wish to look for
+roads on a bridge, then pass `bridge:T`:
+
+```python
+from geomancer.spells import DistanceToNearest
+
+
+# Load the dataset in a pandas dataframe
+# df = load_dataset()
+
+
+dist_spell = DistanceToNearest(
+    "bridge:T",
+    source_table="ph_osm.gis_osm_roads_free_1",
+    feature_name="dist_road_bridges",
+    dburl="bigquery://project-name",
+).cast(df)
 ```
 
 Compose multiple spells into a "spell book" which you can export as a JSON file.
