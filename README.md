@@ -88,10 +88,8 @@ roads on a bridge, then pass `bridge:T`:
 ```python
 from geomancer.spells import DistanceToNearest
 
-
 # Load the dataset in a pandas dataframe
 # df = load_dataset()
-
 
 dist_spell = DistanceToNearest(
     "bridge:T",
