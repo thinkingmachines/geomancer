@@ -73,8 +73,9 @@ class DBCore(abc.ABC):
         -----------
         source_uri : str
             Source table URI to run queries against.
-        target_df : :class:`pandas.DataFrame`
-            Target table to add features to.
+        target_df : :class:`pandas.DataFrame` or str
+            Target table to add features to. If a string, must point to
+            a table location found in the database.
         engine : :class:`sqlalchemy.engine.base.Engine`
             Engine with the database dialect
 

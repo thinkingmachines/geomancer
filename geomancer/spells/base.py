@@ -142,10 +142,11 @@ class Spell(abc.ABC):
 
         Parameters
         ----------
-        df : :class:`pandas.DataFrame`
-            Dataframe containing the points to compare upon. By default, we
-            will look into the :code:`WKT` column. You can specify your
-            own column by passing an argument to the :code:`column` parameter.
+        df : :class:`pandas.DataFrame` or str
+            Object containing the points to compare upon. Can be a DataFrame or
+            a database URL. By default, we will look into the :code:`WKT`
+            column. You can specify your own column by passing an argument to
+            the :code:`column` parameter.
         dburl : str, optional
             Database url used to configure backend connection
         column : str, optional
