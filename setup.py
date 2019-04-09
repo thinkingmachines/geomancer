@@ -7,12 +7,23 @@ with open("README.md", encoding="utf8") as readme_file:
     readme = readme_file.read()
 
 # Packages for installation
-common = ["numpy", "pandas", "loguru", "sqlalchemy", "geoalchemy2", "pytz"]
+common = [
+    "numpy",
+    "pandas",
+    "loguru",
+    "sqlalchemy==1.3.2",
+    "geoalchemy2",
+    "pytz",
+]
 test_requirements = ["pytest==3.6.4", "pytest-cov", "flake8==3.5.0", "tox"]
 
 # Warehouse-specific installations
 extras = {
-    "bq": ["google-cloud-bigquery[pandas,pyarrow]", "pybigquery"],
+    "bq": [
+        "google-cloud-bigquery[pandas,pyarrow]==1.9.0",
+        "pybigquery",
+        "pyarrow==0.12.1",
+    ],
     "sqlite": [],
     "psql": [],
 }
