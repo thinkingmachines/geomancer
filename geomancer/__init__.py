@@ -7,7 +7,7 @@ from .backend.settings import BQConfig, SQLiteConfig
 
 os.environ["LOGURU_LEVEL"] = "INFO"
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 __author__ = "Thinking Machines Data Science"
 __email__ = "hello@thinkingmachin.es"
 
