@@ -1,5 +1,5 @@
 kind: pipeline
-name: python3.6
+name: dev-py36 
 
 steps:
 - name: test
@@ -12,7 +12,7 @@ steps:
 
 ---
 kind: pipeline
-name: python3.7
+name: dev-py37 
 
 steps:
 - name: test
@@ -23,6 +23,18 @@ steps:
   - pip install -r requirements-dev.txt
   - pytest -m "not bqtest and not slow" tests/
 
+---
+kind: pipeline
+name: pkg-tox
+
+steps:
+- name: tox
+  image: python:3.6-stretch
+  commands:
+  - wget -O tests/data/source.sqlite https://storage.googleapis.com/tm-geomancer/test/source.sqlite
+  - ci/install.sh
+  - pip install tox
+  - tox
 
 ---
 kind: pipeline
@@ -40,5 +52,6 @@ steps:
         - tag
 
 depends_on:
-    - python3.6
-    - python3.7
+    - dev-py36 
+    - dev-py37
+    - pkg-tox 
