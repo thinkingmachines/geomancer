@@ -84,9 +84,13 @@ class DBCore(abc.ABC):
         (:class:`sqlalchemy.schema.Table`, :class:`sqlalchemy.schema.Table`)
             Source and Target table
         """
-        target_uri = self.load(
-            df=target_df, **self._inspect_options(self.options)
-        )
+        if isinstance(target_df, str):
+            target_uri = target_df
+        else:
+            # Load the dataframe to database and get its URI
+            target_uri = self.load(
+                df=target_df, **self._inspect_options(self.options)
+            )
         # Create SQLAlchemy primitives
         metadata = MetaData(bind=engine)
         source = Table(source_uri, metadata, autoload=True)
