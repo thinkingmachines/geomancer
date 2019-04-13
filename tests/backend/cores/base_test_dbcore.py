@@ -26,22 +26,36 @@ class BaseTestDBCore:
         assert isinstance(engine, Engine)
 
     @pytest.mark.usefixtures("core", "sample_points", "test_tables")
-    def test_get_tables_source_name(self, core, sample_points, test_tables):
+    @pytest.mark.parametrize("use_dburl", [True, False])
+    def test_get_tables_source_name(
+        self, core, sample_points, test_tables, use_dburl
+    ):
         """Test if source table name is the same as input"""
         engine = core.get_engine()
+        target_uri = (
+            core.load(df=sample_points, **core._inspect_options(core.options))
+            if use_dburl
+            else sample_points
+        )
         source, target = core.get_tables(
-            source_uri=test_tables, target_df=sample_points, engine=engine
+            source_uri=test_tables, target_df=target_uri, engine=engine
         )
         assert test_tables == source.name
 
     @pytest.mark.usefixtures("core", "sample_points", "test_tables")
+    @pytest.mark.parametrize("use_dburl", [True, False])
     def test_get_tables_target_valid_uuid(
-        self, core, sample_points, test_tables
+        self, core, sample_points, test_tables, use_dburl
     ):
         """Test if target table name is a valid UUID v4"""
         engine = core.get_engine()
+        target_uri = (
+            core.load(df=sample_points, **core._inspect_options(core.options))
+            if use_dburl
+            else sample_points
+        )
         source, target = core.get_tables(
-            source_uri=test_tables, target_df=sample_points, engine=engine
+            source_uri=test_tables, target_df=target_uri, engine=engine
         )
 
         def is_valid_uuid(name):
@@ -57,13 +71,19 @@ class BaseTestDBCore:
         assert is_valid_uuid(target.name)
 
     @pytest.mark.usefixtures("core", "sample_points", "test_tables")
+    @pytest.mark.parametrize("use_dburl", [True, False])
     def test_get_tables_target_column_names(
-        self, core, sample_points, test_tables
+        self, core, sample_points, test_tables, use_dburl
     ):
         """Test if target column names is as expected"""
         engine = core.get_engine()
+        target_uri = (
+            core.load(df=sample_points, **core._inspect_options(core.options))
+            if use_dburl
+            else sample_points
+        )
         source, target = core.get_tables(
-            source_uri=test_tables, target_df=sample_points, engine=engine
+            source_uri=test_tables, target_df=target_uri, engine=engine
         )
         expected = sample_points.columns.to_list()
         assert set(expected).issubset(
