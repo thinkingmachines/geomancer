@@ -119,3 +119,6 @@ dmypy.json
 
 # Test fixtures
 *.sqlite
+
+# Coveralls
+.coveralls.yml
