@@ -2,4 +2,3 @@
 exclude_lines =
     pragma: no cover
     @abc.abstractmethod
-    pos = init_pos
