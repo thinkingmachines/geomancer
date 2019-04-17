@@ -5,19 +5,23 @@
 Welcome to Geomancer's documentation!
 =====================================
 
-.. image:: https://badge.fury.io/py/geomancer.svg
+.. image:: https://img.shields.io/pypi/v/geomancer.svg?color=brightgreen&style=flat-square
         :target: https://badge.fury.io/py/geomancer
         :alt: PyPI Version
 
-.. image:: https://cloud.drone.io/api/badges/thinkingmachines/geomancer/status.svg
+.. image:: https://img.shields.io/badge/dynamic/json.svg?color=brightgreen&label=build&query=status&url=https%3A%2F%2Fcloud.drone.io%2Fapi%2Frepos%2Fthinkingmachines%2Fgeomancer%2Fbuilds%2Flatest%3Fref%3Drefs%2Fheads%2Fmaster&style=flat-square
         :target: https://cloud.drone.io/thinkingmachines/geomancer
         :alt: Build Status
 
-.. image:: https://readthedocs.org/projects/geomancer/badge/?version=latest
+.. image:: https://img.shields.io/readthedocs/geomancer.svg?style=flat-square
         :target: https://geomancer.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
-.. image:: https://img.shields.io/badge/License-MIT-blue.svg
+.. image:: https://img.shields.io/coveralls/github/thinkingmachines/geomancer.svg?style=flat-square
+        :target: https://geomancer.readthedocs.io/en/latest/?badge=latest
+        :alt: Coverage Status
+
+.. image:: https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square
         :target: https://opensource.org/licenses/MIT
         :alt: License: MIT
 
