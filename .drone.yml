@@ -8,7 +8,15 @@ steps:
   - wget -O tests/data/source.sqlite https://storage.googleapis.com/tm-geomancer/test/source.sqlite
   - ci/install.sh
   - pip install -r requirements-dev.txt
-  - pytest -m "not bqtest and not slow" tests/
+  - pytest --cov=geomancer -m "not bqtest and not slow" tests/
+- name: coverage
+  image: python:3.6-stretch 
+  environment:
+      COVERALLS_REPO_TOKEN:
+          from_secret: coveralls_token
+  commands:
+  - pip install -r requirements-dev.txt
+  - coveralls -v
 
 ---
 kind: pipeline
