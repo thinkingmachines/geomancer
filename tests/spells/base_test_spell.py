@@ -32,27 +32,27 @@ class BaseTestSpell:
         core = spelldb.spell.get_core(spelldb.dburl)
         engine = core.get_engine()
 
-        source, target = core.get_tables(
+        source_table, target_table = core.get_tables(
             source_uri=spelldb.spell.source_table,
-            target_df=sample_points,
+            target=sample_points,
             engine=engine,
         )
         # Perform the test
         query = spelldb.spell.query(
-            source=source, target=target, core=core, column="WKT"
+            source=source_table, target=target_table, core=core, column="WKT"
         )
         assert isinstance(query, ClauseElement)
 
     @pytest.mark.usefixtures("spelldb", "sample_points")
     def test_cast_return_type(self, spelldb, sample_points):
         """Test if cast() returns the correct type"""
-        results = spelldb.spell.cast(df=sample_points, dburl=spelldb.dburl)
+        results = spelldb.spell.cast(target=sample_points, dburl=spelldb.dburl)
         assert isinstance(results, DataFrame)
 
     @pytest.mark.usefixtures("spelldb", "sample_points")
     def test_cast_return_not_empty(self, spelldb, sample_points):
         """Test if cast() returns a set of values. All our test cases should not be empty"""
-        results = spelldb.spell.cast(df=sample_points, dburl=spelldb.dburl)
+        results = spelldb.spell.cast(target=sample_points, dburl=spelldb.dburl)
         assert results.values.size != 0
 
     @pytest.mark.usefixtures("spelldb")

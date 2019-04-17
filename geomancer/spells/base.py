@@ -132,7 +132,7 @@ class Spell(abc.ABC):
     @logger.catch(reraise=True)
     def cast(
         self,
-        df,
+        target,
         dburl=None,
         column="WKT",
         keep_index=False,
@@ -142,7 +142,7 @@ class Spell(abc.ABC):
 
         Parameters
         ----------
-        df : :class:`pandas.DataFrame` or str
+        target : :class:`pandas.DataFrame` or str
             Object containing the points to compare upon. Can be a DataFrame or
             a database URL. By default, we will look into the :code:`WKT`
             column. You can specify your own column by passing an argument to
@@ -175,12 +175,12 @@ class Spell(abc.ABC):
         engine = core.get_engine()
 
         # Get source and target tables
-        source, target = core.get_tables(
-            source_uri=self.source_table, target_df=df, engine=engine
+        source_table, target_table = core.get_tables(
+            source_uri=self.source_table, target=target, engine=engine
         )
 
         # Build query
-        query = self.query(source, target, core, column)
+        query = self.query(source_table, target_table, core, column)
 
         # Filter output columns
         query = select(

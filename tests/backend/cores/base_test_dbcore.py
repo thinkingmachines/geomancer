@@ -37,10 +37,10 @@ class BaseTestDBCore:
             if use_dburl
             else sample_points
         )
-        source, target = core.get_tables(
-            source_uri=test_tables, target_df=target_uri, engine=engine
+        source_table, target_table = core.get_tables(
+            source_uri=test_tables, target=target_uri, engine=engine
         )
-        assert test_tables == source.name
+        assert test_tables == source_table.name
 
     @pytest.mark.usefixtures("core", "sample_points", "test_tables")
     @pytest.mark.parametrize("use_dburl", [True, False])
@@ -54,8 +54,8 @@ class BaseTestDBCore:
             if use_dburl
             else sample_points
         )
-        source, target = core.get_tables(
-            source_uri=test_tables, target_df=target_uri, engine=engine
+        source_table, target_table = core.get_tables(
+            source_uri=test_tables, target=target_uri, engine=engine
         )
 
         def is_valid_uuid(name):
@@ -68,7 +68,7 @@ class BaseTestDBCore:
                 return False
             return uuid_obj.hex == name_
 
-        assert is_valid_uuid(target.name)
+        assert is_valid_uuid(target_table.name)
 
     @pytest.mark.usefixtures("core", "sample_points", "test_tables")
     @pytest.mark.parametrize("use_dburl", [True, False])
@@ -82,12 +82,12 @@ class BaseTestDBCore:
             if use_dburl
             else sample_points
         )
-        source, target = core.get_tables(
-            source_uri=test_tables, target_df=target_uri, engine=engine
+        source_table, target_table = core.get_tables(
+            source_uri=test_tables, target=target_uri, engine=engine
         )
         expected = sample_points.columns.to_list()
         assert set(expected).issubset(
-            set([col.name for col in target.columns])
+            set([col.name for col in target_table.columns])
         )
 
     @pytest.mark.usefixtures("core", "sample_points")

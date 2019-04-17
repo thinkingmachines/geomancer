@@ -66,14 +66,14 @@ class DBCore(abc.ABC):
         """
         raise NotImplementedError
 
-    def get_tables(self, source_uri, target_df, engine):
+    def get_tables(self, source_uri, target, engine):
         """Create tables given a :class:`sqlalchemy.engine.base.Engine`
 
         Parameters
         -----------
         source_uri : str
             Source table URI to run queries against.
-        target_df : :class:`pandas.DataFrame` or str
+        target : :class:`pandas.DataFrame` or str
             Target table to add features to. If a string, must point to
             a table location found in the database.
         engine : :class:`sqlalchemy.engine.base.Engine`
@@ -84,18 +84,18 @@ class DBCore(abc.ABC):
         (:class:`sqlalchemy.schema.Table`, :class:`sqlalchemy.schema.Table`)
             Source and Target table
         """
-        if isinstance(target_df, str):
-            target_uri = target_df
+        if isinstance(target, str):
+            target_uri = target
         else:
             # Load the dataframe to database and get its URI
             target_uri = self.load(
-                df=target_df, **self._inspect_options(self.options)
+                df=target, **self._inspect_options(self.options)
             )
         # Create SQLAlchemy primitives
         metadata = MetaData(bind=engine)
-        source = Table(source_uri, metadata, autoload=True)
-        target = Table(target_uri, metadata, autoload=True)
-        return source, target
+        source_table = Table(source_uri, metadata, autoload=True)
+        target_table = Table(target_uri, metadata, autoload=True)
+        return source_table, target_table
 
     def get_engine(self):
         """Get the engine from the DBCore
