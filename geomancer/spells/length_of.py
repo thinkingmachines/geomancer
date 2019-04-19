@@ -70,7 +70,7 @@ class LengthOf(Spell):
         self.source_column, self.source_filter = self.extract_columns(on)
         self.within = within
 
-    def query(self, source, target, core, column):
+    def query(self, source, target, core, column, pkey):
         # ST_Buffer is not yet implemented so BigQueryCore won't work
         # (groups.google.com/d/msg/bq-gis-feedback/Yq4Ku6u2A80/ceVXU01RCgAJ)
         if isinstance(core, BigQueryCore):
@@ -125,12 +125,12 @@ class LengthOf(Spell):
         sum_length = (
             select(
                 [
-                    clip.c["__index_level_0__"],
+                    clip.c[pkey],
                     func.sum(clip.c["__len__"]).label(self.feature_name),
                 ]
             )
             .select_from(clip)
-            .group_by(clip.c["__index_level_0__"])
+            .group_by(clip.c[pkey])
             .cte("sum_length")
         )
 
@@ -141,6 +141,6 @@ class LengthOf(Spell):
                 for col in sum_length.columns
                 if col.key not in ("__len__", "__geom__", "__buffer__")
             ],
-            sum_length.c["__index_level_0__"] == buff.c["__index_level_0__"],
+            sum_length.c[pkey] == buff.c[pkey],
         )
         return query

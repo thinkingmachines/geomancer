@@ -96,7 +96,7 @@ class Spell(abc.ABC):
         return Core(dburl, self.options)
 
     @abc.abstractmethod
-    def query(self, source, target, core, column):
+    def query(self, source, target, core, column, pkey):
         """Build the query used to extract features
 
         Parameters
@@ -109,6 +109,10 @@ class Spell(abc.ABC):
             DBCore instance to access DB-specific methods
         column : string
             Column to look the geometries from. The default is :code:`WKT`
+        pkey : str, optional
+            The primary key column in the database. Default is
+            __index_level_0__. This is useful if the table you're passing
+            :code:`cast` to is a database URL rather than a dataframe.
 
         Returns
         -------
@@ -137,6 +141,7 @@ class Spell(abc.ABC):
         column="WKT",
         keep_index=False,
         features_only=False,
+        pkey="__index_level_0__",
     ):
         """Apply the feature transform to an input :class:`pandas.DataFrame`
 
@@ -156,6 +161,10 @@ class Spell(abc.ABC):
         features_only : boolean, optional
             Only return features as output dataframe. Automatically sets
             :code:`keep_index` to :code:`True`.
+        pkey : str, optional
+            The primary key column in the database. Default is
+            __index_level_0__. This is useful if the table you're passing
+            :code:`cast` to is a database URL rather than a dataframe.
 
         Returns
         -------
@@ -180,7 +189,7 @@ class Spell(abc.ABC):
         )
 
         # Build query
-        query = self.query(source_table, target_table, core, column)
+        query = self.query(source_table, target_table, core, column, pkey)
 
         # Filter output columns
         query = select(

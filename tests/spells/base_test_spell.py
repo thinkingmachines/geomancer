@@ -39,7 +39,11 @@ class BaseTestSpell:
         )
         # Perform the test
         query = spelldb.spell.query(
-            source=source_table, target=target_table, core=core, column="WKT"
+            source=source_table,
+            target=target_table,
+            core=core,
+            column="WKT",
+            pkey="__index_level_0__",
         )
         assert isinstance(query, ClauseElement)
 
