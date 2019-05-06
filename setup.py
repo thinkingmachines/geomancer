@@ -33,7 +33,7 @@ requirements = common + extras["bq"] + extras["sqlite"] + extras["psql"]
 
 setup(
     name="geomancer",
-    version="1.0.1",
+    version="1.1.0",
     description="Automated Geospatial Feature Engineering Library",
     long_description=readme,
     long_description_content_type="text/markdown",
