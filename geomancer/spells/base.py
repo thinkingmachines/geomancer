@@ -133,7 +133,6 @@ class Spell(abc.ABC):
             return True
         return col.key != "__index_level_0__"
 
-    @logger.catch(reraise=True)
     def cast(
         self,
         target,
