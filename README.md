@@ -2,7 +2,7 @@
 ---
 
 [![PyPI](https://img.shields.io/pypi/v/geomancer.svg?color=brightgreen&style=flat-square)](https://pypi.org/project/geomancer/)
-[![Build Status](https://img.shields.io/badge/dynamic/json.svg?color=brightgreen&label=build&query=status&url=https%3A%2F%2Fcloud.drone.io%2Fapi%2Frepos%2Fthinkingmachines%2Fgeomancer%2Fbuilds%2Flatest%3Fref%3Drefs%2Fheads%2Fmaster&style=flat-square)](https://cloud.drone.io/thinkingmachines/geomancer)
+[![Build Status](https://img.shields.io/drone/build/thinkingmachines/geomancer.svg?logo=drone&style=flat-square)](https://cloud.drone.io/thinkingmachines/geomancer)
 [![Read the Docs](https://img.shields.io/readthedocs/geomancer.svg?style=flat-square)](https://geomancer.readthedocs.io/en/latest/)
 [![Coveralls github](https://img.shields.io/coveralls/github/thinkingmachines/geomancer.svg?style=flat-square)](https://coveralls.io/github/thinkingmachines/geomancer)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](https://opensource.org/licenses/MIT)
