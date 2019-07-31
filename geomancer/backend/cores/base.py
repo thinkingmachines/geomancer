@@ -15,7 +15,7 @@ from sqlalchemy.engine import create_engine
 from sqlalchemy.engine.url import make_url
 from sqlalchemy.schema import MetaData, Table
 
-from ..settings import BQConfig, SQLiteConfig
+from ..settings import BQConfig, SQLiteConfig, PostgreSQLConfig
 
 
 class DBCore(abc.ABC):
@@ -35,7 +35,7 @@ class DBCore(abc.ABC):
         """
         self.dburl = make_url(dburl)
         if not options:
-            options = {"bigquery": BQConfig(), "sqlite": SQLiteConfig()}[
+            options = {"bigquery": BQConfig(), "sqlite": SQLiteConfig(), "postgresql": PostgreSQLConfig()}[
                 self.dburl.get_backend_name()
             ]
         self.options = options

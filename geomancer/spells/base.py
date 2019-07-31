@@ -26,9 +26,9 @@ from loguru import logger
 from sqlalchemy.engine.url import make_url
 from sqlalchemy.sql import select
 
-from ..backend.cores import BigQueryCore, SQLiteCore
+from ..backend.cores import BigQueryCore, SQLiteCore, PostgreSQLCore
 
-CORES = {"bigquery": BigQueryCore, "sqlite": SQLiteCore}
+CORES = {"bigquery": BigQueryCore, "sqlite": SQLiteCore, "postgresql": PostgreSQLCore}
 
 
 class Spell(abc.ABC):

@@ -79,3 +79,17 @@ class SQLiteConfig(Config):
     INDEX = False
     INDEX_LABEL = None
     IF_EXISTS = "replace"
+
+class PostgreSQLConfig(Config):
+
+    """Configuration for interacting with a PostgreSQL Database
+
+    """
+
+    @property
+    def name(self):
+        return "postgres"
+
+    INDEX = False
+    INDEX_LABEL = None
+    IF_EXISTS = "replace"

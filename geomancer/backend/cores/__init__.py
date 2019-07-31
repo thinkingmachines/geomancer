@@ -8,5 +8,6 @@ ideally be executable across **all** types of data warehouse.
 
 from .bq import BigQueryCore
 from .sqlite import SQLiteCore
+from .psql import PostgreSQLCore
 
-__all__ = ["BigQueryCore", "SQLiteCore"]
+__all__ = ["BigQueryCore", "SQLiteCore", "PostgreSQLCore"]
