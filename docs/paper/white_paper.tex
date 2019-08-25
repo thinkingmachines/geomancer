@@ -79,7 +79,7 @@
     This paper presents Geomancer, an open-source framework for geospatial
     feature engineering. It simplifies the acquisition of geospatial attributes
     for downstream, large-scale machine learning tasks.  Geomancer leverages
-    any geospatial dataset stored in a data warehouse. Users need only to
+    any geospatial dataset stored in a data warehouse\textemdash users need only to
     define the features (\textit{Spells}) they want to create, and cast them on
     any spatial dataset. In addition, these features can be exported into a
     JSON file (\textit{SpellBook}) for sharing and reproducibility.  Geomancer
@@ -98,13 +98,12 @@ possible to obtain, say, the number of malls within 1.5-km, the distance to the
 nearest supermarket, or the frequency of traffic jams\textemdash all of which
 can be used later on for downstream machine learning tasks. 
 
-Due to this nature, engineering features for geospatial data is a challenging
-task, requiring a significant amount of compute and storage
+Due to this spatial nature, engineering features for geospatial data is a
+challenging task, requiring significant amount of compute and storage
 \cite{nargesian2017learning, nargesian2018dataset, storcheus2015survey}.
-Important considerations include (1) the storage capacity to house
-geospatial data sources, (2) the compute complexity to query from that source,
-and the (3) ease of extracting information from these sources
-\cite{klien2005requirements}. 
+Important considerations include (1) the storage capacity to house geospatial
+data sources, (2) the compute complexity to query from that source, and the (3)
+ease of extracting information from these sources \cite{klien2005requirements}. 
 
 In this paper, we introduce
 Geomancer,\footnote{\url{https://github.com/thinkingmachines/geomancer}} an
@@ -136,13 +135,12 @@ real-estate price estimation.
 
 \paragraph{Concepts}
 The fundamental unit in Geomancer is a logical feature \cite{smith2017ballet}
-called a \textit{Spell}. It maps a coordinate to a vector of feature values,
+called a \textit{Spell}. It maps a coordinate into a vector of feature values,
 $f_{j}^{\mathcal{D}} : \mathcal{V}^{2} \rightarrow \mathbb{R}^{q_j}$, where
 $\mathcal{V}$ is the set of feasible coordinates (latitude and longitude in
-EPSG:4326) and $q_{j}$ is the dimensionality of the $j$th feature vector. A
-collection of spells\textemdash that is, a \textit{SpellBook}\textemdash is
-then defined as a set of feature functions $\mathcal{F}^{\mathcal{D}} = \{f_j
-\vert j = 1 \dots m\}$. 
+EPSG:4326 \cite{WGS84EPS46:online}) and $q_{j}$ is the dimensionality of the $j$th feature vector. A
+collection of spells, i.e., a \textit{SpellBook}, is then defined as a set of
+feature functions $\mathcal{F}^{\mathcal{D}} = \{f_j \vert j = 1 \dots m\}$. 
 
 Geomancer allows users to define feature transforms $F^{\mathcal{D}}$, and
 apply these functions to a dataset containing spatial coordinates
@@ -168,20 +166,20 @@ data source (Figure \ref{fig:architecture}).
         any given spatial dataset. Creating new features is done via the
         factory design pattern whereas the SpellBook mechanism is accomplished
         using the builder pattern \cite{gamma1995design}.
-    \item \textit{Data warehouse server} The data warehouse provides the storage and
-        compute capacity in the framework. The library client can connect to multiple
-        databases at the same time, and can handle both OLTP and OLAP
-        workloads. The extracted features can be stored
-        inside the warehouse or exported as a dataframe for immediate
-        consumption.
+    \item \textit{Data warehouse server} The data warehouse provides the
+        storage and compute capacity in the framework. The library client can
+        connect to multiple databases at the same time, and can handle both
+        online transactional (OLTP) or analytical (OLAP) processing workloads.
+        The extracted features can be stored inside the warehouse or exported
+        as a dataframe for immediate consumption.
     \item \textit{External data source} An external data source is loaded
         inside the warehouse as basis for feature engineering. For example, if
         we want to obtain the number of malls within a 1.5-km radius, we should
-        have some knowledge of all mall locations within the area in
-        question. Fortunately, open datasets such as OpenStreetMap (OSM)
-        \cite{osm2017} exists to give such information. In practice, we create
-        simple ETL (Extract-Transform-Load) pipelines to deliver timely, rich,
-        and accurate data from external sources. 
+        have some knowledge of all mall locations within the area in question.
+        Fortunately, open datasets such as OpenStreetMap (OSM) \cite{osm2017}
+        exists to give such information. Usually, we create
+        Extract-Transform-Load (ETL) pipelines to deliver timely, rich, and
+        accurate data from external sources. 
 \end{itemize}
 
 \section{Usage}
@@ -275,7 +273,21 @@ df = sample_points_new() # load your own data
 df_with_features = exported_spellbook.cast(df)
 \end{lstlisting}
 
-\section{Case studies}
+\section{Case study: property value estimation in Singapore}
+
+We used Geomancer to predict residential prices per square foot in Singapore. 
+The dataset was acquired from the Urban Redevelopment Authority's
+open listing of apartment and condominium sales in the last
+four years \cite{ura2019property}. We used this information to compile a
+dataset showing the locations and unit price per square foot for over $50,000$
+transactions.
+
+Thus, we have a raw dataset, $\mathcal{D}^{\prime} = \left\{\mathcal{V},
+\mathcal{Y}\right\}$ where $\mathcal{V} = \left\{v_0, v_1 \right\}$ is a set of
+spatial coordinates in EPSG:4326 \cite{WGS84EPS46:online} and 
+
+Using the Geomancer framework and OSM data, we defined 
+
 
 \section{Conclusion}
 
@@ -283,12 +295,15 @@ In this paper, we introduced Geomancer, an open-source framework to perform
 geospatial feature engineering at scale. We described the Spell, a logical
 feature that serves as the basic building-block of the framework. Then, we
 showed how it integrates with the overall architecture and demonstrated how it
-can be used through the Python client library. Lastly, we provided sample
-production use-cases of Geomancer for various applications. For future
-research, we plan to evaluate user-efficiency and system robustness in more
-detail. Finally, we also hope to expand the number of database connections
-(e.g. Amazon Athena, Redshift, etc.) and primitive features to accommodate
-different cloud providers and other advanced use-cases.
+can be used through the Python client library. Lastly, we provided a sample
+production use-case of Geomancer for predicting residential prices per square
+foot in Singapore. Using only Geomancer-based features and OpenStreetMap data,
+we were able to achieve $86\%$ accuracy with an error margin of SGD 100. 
+
+For future research, we plan to evaluate user-efficiency and system robustness
+in more detail. Finally, we also hope to expand the number of database
+connections (e.g. Amazon Athena, Redshift, etc.) and primitive features to
+accommodate different cloud providers and other advanced use-cases.
  
 \bibliographystyle{unsrt}
 \bibliography{bibliography}
