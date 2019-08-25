@@ -83,8 +83,8 @@
     define the features (\textit{Spells}) they want to create, and cast them on
     any spatial dataset. In addition, these features can be exported into a
     JSON file (\textit{SpellBook}) for sharing and reproducibility.  Geomancer
-    has been useful to some of our production use-cases such as wealth
-    prediction, real-estate price estimation, and more.
+    has been useful to some of our production use-cases such as property value
+    estimation, area valuation, and more.
 \end{abstract}
 
 \section{Introduction}
@@ -276,17 +276,19 @@ df_with_features = exported_spellbook.cast(df)
 \section{Case study: property value estimation in Singapore}
 
 We used Geomancer to predict residential prices per square foot in Singapore. 
-The dataset was acquired from the Urban Redevelopment Authority's
+The raw data was acquired from the Urban Redevelopment Authority's
 open listing of apartment and condominium sales in the last
 four years \cite{ura2019property}. We used this information to compile a
-dataset showing the locations and unit price per square foot for over $50,000$
+dataset containing the locations and unit price per square foot for over $50,000$
 transactions.
 
-Thus, we have a raw dataset, $\mathcal{D}^{\prime} = \left\{\mathcal{V},
-\mathcal{Y}\right\}$ where $\mathcal{V} = \left\{v_0, v_1 \right\}$ is a set of
-spatial coordinates in EPSG:4326 \cite{WGS84EPS46:online} and 
+% Talk about the dataset in mathematical notation
 
-Using the Geomancer framework and OSM data, we defined 
+% Talk about how you trained the model. What kind of model was used?
+
+% Some interesting insights and results
+
+% Further applications
 
 
 \section{Conclusion}
@@ -304,6 +306,8 @@ For future research, we plan to evaluate user-efficiency and system robustness
 in more detail. Finally, we also hope to expand the number of database
 connections (e.g. Amazon Athena, Redshift, etc.) and primitive features to
 accommodate different cloud providers and other advanced use-cases.
+
+% acknowledgments section
  
 \bibliographystyle{unsrt}
 \bibliography{bibliography}
