@@ -275,6 +275,8 @@ df_with_features = exported_spellbook.cast(df)
 
 \section{Case study: property value estimation in Singapore}
 
+% Put an introduction spiel
+
 We used Geomancer to predict residential prices per square foot in Singapore. 
 The raw data was acquired from the Urban Redevelopment Authority's
 open listing of apartment and condominium sales in the last
@@ -283,10 +285,23 @@ dataset containing the locations and unit price per square foot for over $50,000
 transactions.
 
 % Talk about the dataset in mathematical notation
+Thus, we are given a raw dataset $\mathcal{D}^{\prime} = \left\{\mathcal{V},
+\mathcal{Y}\right\}$, where $\mathcal{V}$ is the property's spatial coordinate
+in EPSG:4326, and $\mathcal{Y} \in \mathbb{R}$ is the unit price per square
+foot. We then used Geomancer, coupled with OSM data, to define logical features
+$\mathcal{F}^{\mathcal{D}}$ such as the number of restaurants within 3-km,
+distance to the nearest bus stop, or distance to the nearest nightclub. This
+resulted to a feature matrix $X^{\mathcal{D}}$ that will be used for model
+training. 
+
+% How many features were created? 
+% Maybe you can check the dataset in BQ, it should be there
 
 % Talk about how you trained the model. What kind of model was used?
+% Check if there are any colab notebooks there
 
 % Some interesting insights and results
+% It might be important to turn the images into something "academic-y"
 
 % Further applications
 
@@ -308,8 +323,14 @@ connections (e.g. Amazon Athena, Redshift, etc.) and primitive features to
 accommodate different cloud providers and other advanced use-cases.
 
 % acknowledgments section
+\subsubsection*{Acknowledgments}
+
+This work was supported by the UNICEF Innovation Fund. We would like to thank
+our mentors for the insightful discussions and valuable guidance. 
  
 \bibliographystyle{unsrt}
+
+\small
 \bibliography{bibliography}
 
 \end{document}
