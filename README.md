@@ -1,7 +1,7 @@
 ![Geomancer Logo](https://storage.googleapis.com/tm-geomancer/assets/header.png)
 ---
 
-<p align"center">
+<p align="center">
     <a href="https://pypi.org/project/geomancer/">
     <img src="https://img.shields.io/pypi/v/geomancer.svg?color=brightgreen&style=flat-square">
     </img></a>
