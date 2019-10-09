@@ -13,6 +13,8 @@ data warehouse like BigQuery. You can use this to create, share, and iterate
 geospatial features for your downstream tasks (analysis, modelling,
 visualization, etc.). 
 
+![Explainer GIF](https://storage.googleapis.com/tm-geomancer/assets/geomancer-explainer.gif)
+
 ## Features
 
 Geomancer can perform geospatial feature engineering for all types of vector data
