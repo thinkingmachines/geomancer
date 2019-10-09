@@ -1,11 +1,23 @@
 ![Geomancer Logo](https://storage.googleapis.com/tm-geomancer/assets/header.png)
 ---
 
-[![PyPI](https://img.shields.io/pypi/v/geomancer.svg?color=brightgreen&style=flat-square)](https://pypi.org/project/geomancer/)
-[![Build Status](https://img.shields.io/drone/build/thinkingmachines/geomancer.svg?logo=drone&style=flat-square)](https://cloud.drone.io/thinkingmachines/geomancer)
-[![Read the Docs](https://img.shields.io/readthedocs/geomancer.svg?style=flat-square)](https://geomancer.readthedocs.io/en/latest/)
-[![Coveralls github](https://img.shields.io/coveralls/github/thinkingmachines/geomancer.svg?style=flat-square)](https://coveralls.io/github/thinkingmachines/geomancer)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+<p align"center">
+    <a href="https://pypi.org/project/geomancer/">
+    <img src="https://img.shields.io/pypi/v/geomancer.svg?color=brightgreen&style=flat-square">
+    </img></a>
+    <a href="https://cloud.drone.io/thinkingmachines/geomancer">
+    <img src="https://img.shields.io/drone/build/thinkingmachines/geomancer.svg?logo=drone&style=flat-square">
+    </img></a>
+    <a href="https://geomancer.readthedocs.io/en/latest/">
+    <img src="https://img.shields.io/readthedocs/geomancer.svg?style=flat-square">
+    </img></a>
+    <a href="https://coveralls.io/github/thinkingmachines/geomancer">
+    <img src="https://img.shields.io/coveralls/github/thinkingmachines/geomancer.svg?style=flat-square">
+    </img></a>
+    <a href="https://opensource.org/licenses/MIT">
+    <img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square">
+    </img></a>
+</p>
 
 Geomancer is a geospatial feature engineering library. It leverages geospatial
 data such as [OpenStreetMap (OSM)](https://www.openstreetmap.org/) alongside a
