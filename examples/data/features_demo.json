@@ -1,1 +1,31 @@
-{"column": "WKT", "spells": [{"source_table": "ph_osm.gis_osm_pois_free_1", "feature_name": "dist_primary", "source_id": "osm_id", "dburl": "bigquery://tm-geospatial", "options": null, "source_column": "fclass", "source_filter": "embassy", "within": 10000, "module": "geomancer.spells.distance_to_nearest", "type": "DistanceToNearest"}, {"source_table": "ph_osm.gis_osm_pois_free_1", "feature_name": "num_supermarkets", "source_id": "osm_id", "dburl": "bigquery://tm-geospatial", "options": null, "source_column": "fclass", "source_filter": "supermarket", "within": 10000, "module": "geomancer.spells.number_of", "type": "NumberOf"}], "author": "Lj Miranda", "description": "Features for Geomancer Demo"}
+{
+  "column": "WKT",
+  "spells": [
+    {
+      "source_table": "ph_osm.gis_osm_pois_free_1",
+      "feature_name": "dist_primary",
+      "source_id": "osm_id",
+      "dburl": "bigquery://tm-geospatial",
+      "options": null,
+      "source_column": "fclass",
+      "source_filter": "embassy",
+      "within": 10000,
+      "module": "geomancer.spells.distance_to_nearest",
+      "type": "DistanceToNearest"
+    },
+    {
+      "source_table": "ph_osm.gis_osm_pois_free_1",
+      "feature_name": "num_supermarkets",
+      "source_id": "osm_id",
+      "dburl": "bigquery://tm-geospatial",
+      "options": null,
+      "source_column": "fclass",
+      "source_filter": "supermarket",
+      "within": 10000,
+      "module": "geomancer.spells.number_of",
+      "type": "NumberOf"
+    }
+  ],
+  "author": "Lj Miranda",
+  "description": "Features for Geomancer Demo"
+}
