@@ -1,16 +1,21 @@
 -r requirements.in
+
 # Testing
 bumpversion
 python-dotenv==0.9.1
 pytest-cov
-pytest==3.6.4
+pytest
 flake8==3.5.0
 coveralls
 tox
+
 # Documentation
 Sphinx==1.7.6
 sphinx_rtd_theme
 sphinxcontrib-napoleon
+
 # Deployment
 twine
 
+# Security patches
+bleach>=3.1.4
