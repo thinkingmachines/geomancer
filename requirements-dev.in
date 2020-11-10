@@ -19,3 +19,4 @@ twine
 
 # Security patches
 bleach>=3.1.4
+cryptography>=3.2
