@@ -7,3 +7,4 @@ pandas
 pandas-gbq
 pytz
 sqlalchemy
+cryptography>=3.3.2
